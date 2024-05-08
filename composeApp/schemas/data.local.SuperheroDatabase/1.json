@@ -1,0 +1,137 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "33d265cf8c93de5e41e6fe0b92868ac7",
+    "entities": [
+      {
+        "tableName": "SuperheroEntity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `strength` INTEGER, `durability` INTEGER, `combat` INTEGER, `power` INTEGER, `speed` INTEGER, `intelligence` INTEGER, `gender` TEXT, `race` TEXT, `eyeColor` TEXT, `weight` TEXT, `hairColor` TEXT, `height` TEXT, `image` TEXT, `firstAppearance` TEXT, `placeOfBirth` TEXT, `aliases` TEXT, `fullName` TEXT, `publisher` TEXT, `alterEgos` TEXT, `alignment` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "strength",
+            "columnName": "strength",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "durability",
+            "columnName": "durability",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "combat",
+            "columnName": "combat",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "power",
+            "columnName": "power",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "speed",
+            "columnName": "speed",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "intelligence",
+            "columnName": "intelligence",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "gender",
+            "columnName": "gender",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "race",
+            "columnName": "race",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "eyeColor",
+            "columnName": "eyeColor",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "weight",
+            "columnName": "weight",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "hairColor",
+            "columnName": "hairColor",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "height",
+            "columnName": "height",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "image",
+            "columnName": "image",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "firstAppearance",
+            "columnName": "firstAppearance",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "placeOfBirth",
+            "columnName": "placeOfBirth",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "aliases",
+            "columnName": "aliases",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "fullName",
+            "columnName": "fullName",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "publisher",
+            "columnName": "publisher",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "alterEgos",
+            "columnName": "alterEgos",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "alignment",
+            "columnName": "alignment",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '33d265cf8c93de5e41e6fe0b92868ac7')"
+    ]
+  }
+}
