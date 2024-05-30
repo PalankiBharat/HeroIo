@@ -5,5 +5,4 @@ object ApiConstants {
     const val ALL_SUPERHEROES = "all.json"
     const val BY_ID = "id/"
     const val dbFileName = "superheroio.db"
-
 }

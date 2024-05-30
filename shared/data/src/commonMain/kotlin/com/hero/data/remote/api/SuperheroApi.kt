@@ -1,8 +1,6 @@
 package com.hero.data.remote.api
 
-import data.model.Superhero
-import data.remote.api.CustomError
-import data.remote.api.CustomException
+import com.hero.data.model.Superhero
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
@@ -48,7 +46,7 @@ class SuperheroApi : SuperheroApiService
         }
     }
 
-   override suspend fun getSuperHeroById(id:Int):Superhero?
+   override suspend fun getSuperHeroById(id:Int): Superhero?
     {
         val result = try {
             httpClient.get {

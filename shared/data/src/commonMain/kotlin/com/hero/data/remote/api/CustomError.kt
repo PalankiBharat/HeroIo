@@ -1,4 +1,4 @@
-package data.remote.api
+package com.hero.data.remote.api
 
 enum class CustomError {
     SERVICE_UNAVAILABLE,

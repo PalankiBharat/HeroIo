@@ -1,7 +1,4 @@
-package data.model
-
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+package com.hero.data.model
 
 
 @kotlinx.serialization.Serializable

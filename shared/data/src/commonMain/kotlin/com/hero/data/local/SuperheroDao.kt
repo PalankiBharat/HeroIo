@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import data.model.SuperheroEntity
+import com.hero.data.model.SuperheroEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

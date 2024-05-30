@@ -1,7 +1,7 @@
 package com.hero.data.utils
 
-import data.model.Superhero
-import data.model.SuperheroEntity
+import com.hero.data.model.Superhero
+import com.hero.data.model.SuperheroEntity
 
 fun Superhero.toSuperheroEntity(): SuperheroEntity {
     return SuperheroEntity(

@@ -1,6 +1,6 @@
 package com.hero.data.utils
 
-import data.remote.api.CustomException
+import com.hero.data.remote.api.CustomException
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.HttpRequestTimeoutException
 import io.ktor.client.plugins.RedirectResponseException
