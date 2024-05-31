@@ -34,7 +34,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.example.domain"
+    namespace = "com.hero.io"
     compileSdk = 34
     defaultConfig {
         minSdk = 25
