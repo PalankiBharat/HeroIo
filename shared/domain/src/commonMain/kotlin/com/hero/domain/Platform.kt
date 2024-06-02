@@ -1,4 +1,4 @@
-package com.example.domain
+package com.hero.domain
 
 interface Platform {
     val name: String

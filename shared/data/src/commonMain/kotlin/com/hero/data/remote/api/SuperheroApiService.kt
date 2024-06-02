@@ -1,8 +1,8 @@
 package com.hero.data.remote.api
 
-import com.hero.data.model.Superhero
+import com.hero.data.model.SuperheroNetworkEntity
 
 interface SuperheroApiService {
-    suspend fun getSuperHeroList():List<Superhero?>
-    suspend fun getSuperHeroById(id:Int): Superhero?
+    suspend fun getSuperHeroList():List<SuperheroNetworkEntity?>
+    suspend fun getSuperHeroById(id:Int): SuperheroNetworkEntity?
 }

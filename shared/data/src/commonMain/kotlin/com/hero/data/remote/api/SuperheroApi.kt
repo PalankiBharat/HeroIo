@@ -1,6 +1,6 @@
 package com.hero.data.remote.api
 
-import com.hero.data.model.Superhero
+import com.hero.data.model.SuperheroNetworkEntity
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
@@ -23,7 +23,7 @@ class SuperheroApi : SuperheroApiService
             json()
         }
     }
-  override suspend fun getSuperHeroList(): List<Superhero?> {
+  override suspend fun getSuperHeroList(): List<SuperheroNetworkEntity?> {
         val result = try {
             httpClient.get {
                 url(BASE_URL+ALL_SUPERHEROES)
@@ -46,7 +46,7 @@ class SuperheroApi : SuperheroApiService
         }
     }
 
-   override suspend fun getSuperHeroById(id:Int): Superhero?
+   override suspend fun getSuperHeroById(id:Int): SuperheroNetworkEntity?
     {
         val result = try {
             httpClient.get {

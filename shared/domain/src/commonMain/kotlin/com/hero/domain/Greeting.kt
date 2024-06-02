@@ -1,4 +1,4 @@
-package com.example.domain
+package com.hero.domain
 
 class Greeting {
     private val platform: Platform = getPlatform()

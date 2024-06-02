@@ -26,6 +26,8 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             //put your multiplatform dependencies here
+            implementation(project(":shared:data"))
+            implementation(libs.kotlinx.coroutines.core)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -34,7 +36,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.hero.io"
+    namespace = "com.hero.domain"
     compileSdk = 34
     defaultConfig {
         minSdk = 25
@@ -44,3 +46,4 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 }
+
