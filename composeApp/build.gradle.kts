@@ -4,7 +4,6 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
-    alias(libs.plugins.room)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
 }
@@ -34,12 +33,10 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
-            implementation(libs.ktor.client.android)
 
         }
 
         iosMain.dependencies {
-            implementation(libs.ktor.client.ios)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -56,23 +53,13 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
 
-            //Ktor
-            implementation(libs.ktor.client.core)
-            //Only needed when you want to use Kotlin Serialization
-            implementation(libs.ktor.client.serialization)
-            implementation(libs.ktor.client.logging)
-            implementation(libs.ktor.client.content.negotiation)
-            implementation(libs.ktor.serialization.kotlinx.json)
+            
             implementation(libs.androidx.lifecycle.viewmodel)
 
             //Coil
             implementation(libs.coil)
             implementation(libs.coil.compose)
             implementation(libs.coil.network)
-
-            //Room
-            implementation(libs.androidx.room.runtime)
-            implementation(libs.sqlite.bundled)
         }
     }
 }
@@ -113,9 +100,5 @@ android {
 }
 
 
-
-room {
-    schemaDirectory("$projectDir/schemas")
-}
 
 

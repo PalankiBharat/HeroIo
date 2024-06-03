@@ -29,5 +29,6 @@ dependencyResolutionManagement {
 }
 
 include(":composeApp")
-include(":shared:data")
-include(":shared:domain")
+include(":data")
+include(":domain")
+include(":viewmodels")
