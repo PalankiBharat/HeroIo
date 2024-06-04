@@ -11,11 +11,13 @@ sealed interface Response<out T> {
     data class Error(val error: CustomError) : Response<Nothing>
 }
 
-inline fun <T> Response<T>.onSuccess(onSuccess: (T) -> Unit) {
+inline fun <T> Response<T>.onSuccess(onSuccess: (T) -> Unit):Response<T>  {
     if (this is Response.Success) onSuccess(this.value)
+    return this
 }
-inline fun <T> Response<T>.onError(onError: (CustomError) -> Unit) {
+inline fun <T> Response<T>.onError(onError: (CustomError) -> Unit) :Response<T> {
     if (this is Response.Error) onError(error)
+    return this
 }
 inline fun <T> Response<T>.onResult(onSuccess: (T) -> Unit, onError: (CustomError) -> Unit) {
     when(this) {

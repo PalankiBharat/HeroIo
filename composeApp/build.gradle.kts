@@ -17,7 +17,7 @@ kotlin {
             }
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -28,9 +28,9 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     sourceSets {
-        
+
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
@@ -46,6 +46,10 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+            implementation()
+
+            implementation(project(":viewmodels"))
+            implementation(project(":domain"))
 
             //Kotlin Coroutines
             implementation(libs.kotlinx.coroutines.core)
@@ -53,8 +57,9 @@ kotlin {
             //Koin
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
+            implementation(libs.koin.composeVM)
 
-            
+
             implementation(libs.androidx.lifecycle.viewmodel)
 
             //Coil

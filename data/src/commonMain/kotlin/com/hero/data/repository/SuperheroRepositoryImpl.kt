@@ -19,7 +19,7 @@ class SuperheroRepositoryImpl(
         }
     }
 
-    override fun getSuperheroesFromLocal(): Flow<List<SuperheroEntity?>> =
+    override fun getSuperheroesFromLocal(): Flow<List<SuperheroEntity>> =
         superheroDao.getAllHeroes()
 
 

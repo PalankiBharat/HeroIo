@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 interface SuperheroDao {
 
     @Query("SELECT * FROM SuperheroEntity")
-     fun getAllHeroes(): Flow<List<SuperheroEntity?>>
+     fun getAllHeroes(): Flow<List<SuperheroEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addAllHeroes(heroes: List<SuperheroEntity>)
