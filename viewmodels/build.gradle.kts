@@ -27,6 +27,11 @@ kotlin {
         commonMain.dependencies {
             //put your multiplatform dependencies here
             implementation(project(":domain"))
+            implementation(libs.androidx.lifecycle.viewmodel)
+            //Kotlin Coroutines
+            implementation(libs.kotlinx.coroutines.core)
+            //Koin
+            implementation(libs.koin.core)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
