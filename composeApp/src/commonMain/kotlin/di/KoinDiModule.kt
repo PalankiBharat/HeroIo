@@ -1,5 +1,6 @@
 package di
 
+import com.hero.viewmodels.viewModelModule
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
@@ -10,7 +11,6 @@ val sharedModule = module {
     single { provideRealm() }
     single { SuperheroListingViewModel(get()) }
     platformModule()*/
-
 }
 
 fun initKoin(
@@ -19,8 +19,8 @@ fun initKoin(
     startKoin {
         appDeclaration()
         modules(sharedModule)
+        modules(viewModelModule)
     }
 
-fun initKoin() = initKoin() {}
 
 
