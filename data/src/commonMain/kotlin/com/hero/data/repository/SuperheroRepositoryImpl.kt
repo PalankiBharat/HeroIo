@@ -12,6 +12,7 @@ class SuperheroRepositoryImpl(
     private val api: SuperheroApi,
     private val superheroDao: SuperheroDao
 ) : SuperheroRepository {
+
     override suspend fun getSuperheroListFromRemote() {
         val superheroList = api.getSuperHeroList()
         if (superheroList.isNotEmpty()) {

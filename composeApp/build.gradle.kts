@@ -31,7 +31,6 @@ kotlin {
 
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
-            implementation(libs.compose.ui.tooling)
             implementation(libs.androidx.activity.compose)
 
         }
@@ -45,7 +44,9 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-            implementation(libs.compose.ui.tooling)
+            implementation(compose.material3)
+            implementation(compose.materialIconsExtended)
+          //  implementation(compose.uiTooling)
 
 
             implementation(project(":viewmodels"))
