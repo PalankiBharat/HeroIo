@@ -10,6 +10,3 @@ interface Platform {
 
 expect fun getPlatform(): Platform
 
-val viewModelModule = module {
-    viewModelOf(::SuperheroDetailsViewmodel)
-}

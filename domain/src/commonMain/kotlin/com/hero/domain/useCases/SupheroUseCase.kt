@@ -6,7 +6,9 @@ import com.hero.data.utils.asResult
 import com.hero.domain.mapper.toSuperhero
 import com.hero.domain.utils.safeApiCall
 import kotlinx.coroutines.flow.map
+import org.koin.core.annotation.Single
 
+@Single
 class SuperheroUseCase(
     private val superheroRepository: SuperheroRepository
 ) {

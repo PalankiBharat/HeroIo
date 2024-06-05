@@ -6,6 +6,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import com.hero.domain.model.Superhero
+import ui.home.SuperheroCard
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,6 +15,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             App()
+
         }
     }
 }
@@ -22,4 +25,8 @@ class MainActivity : ComponentActivity() {
 fun AppAndroidPreview() {
     App()
 }
+
+
+
+
 

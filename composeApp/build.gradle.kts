@@ -32,7 +32,7 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
-
+            implementation(libs.koin.android)
         }
 
         iosMain.dependencies {
@@ -43,14 +43,15 @@ kotlin {
             implementation(compose.material)
             implementation(compose.ui)
             implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
             implementation(compose.material3)
             implementation(compose.materialIconsExtended)
-          //  implementation(compose.uiTooling)
+
+            //  implementation(compose.uiTooling)
 
 
             implementation(project(":viewmodels"))
             implementation(project(":domain"))
+            implementation(project(":data"))
 
             //Kotlin Coroutines
             implementation(libs.kotlinx.coroutines.core)
@@ -103,6 +104,11 @@ android {
     }
     dependencies {
         debugImplementation(libs.compose.ui.tooling)
+        implementation(libs.compose.ui.tooling.preview)
+        implementation(libs.compose.ui)
+        implementation(libs.compose.material)
+        implementation(libs.compose.runtime)
+      //  debugImplementation(compose.uiTooling)
     }
 
 }

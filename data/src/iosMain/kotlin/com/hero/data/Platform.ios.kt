@@ -4,6 +4,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import com.hero.data.local.SuperheroDatabase
+import com.hero.data.local.instantiateImpl
 import com.hero.data.utils.ApiConstants.dbFileName
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
@@ -29,7 +30,7 @@ actual fun httpClient(config: HttpClientConfig<*>.()->Unit) = HttpClient(Darwin)
 
 
 
-fun getSuperheroDatabase(): RoomDatabase.Builder<SuperheroDatabase> {
+fun getDatabaseBuilder(): RoomDatabase.Builder<SuperheroDatabase> {
     val dbFilePath = NSHomeDirectory() + dbFileName
     return Room.databaseBuilder<SuperheroDatabase>(
         name = dbFilePath,
@@ -38,5 +39,7 @@ fun getSuperheroDatabase(): RoomDatabase.Builder<SuperheroDatabase> {
 }
 
 actual fun platformModules() = module {
-
+    single {
+        getDatabaseBuilder()
+    }
 }

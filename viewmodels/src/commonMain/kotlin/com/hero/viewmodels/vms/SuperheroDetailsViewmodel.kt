@@ -29,6 +29,7 @@ open class SuperheroDetailsViewmodel(
 
     init {
         viewModelScope.launch {
+            sendIntents(SuperheroDetailsIntents.GetDataFromNetwork)
             superheroUseCase.getSuperheroList().collectLatest {
                 it.onError {
                     _events.emit(HeroDetailsEvents.OnError(it.message))

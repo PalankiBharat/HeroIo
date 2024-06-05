@@ -10,7 +10,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import com.hero.viewmodels.vms.SuperheroDetailsViewmodel
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.annotation.KoinExperimentalAPI
 
+
+@OptIn(KoinExperimentalAPI::class)
 @Composable
 fun HomeScreen(superheroDetailsViewmodel: SuperheroDetailsViewmodel = koinViewModel()) {
     val states = superheroDetailsViewmodel.states.collectAsState()
@@ -30,3 +33,4 @@ fun HomeScreen(superheroDetailsViewmodel: SuperheroDetailsViewmodel = koinViewMo
 
 
 }
+

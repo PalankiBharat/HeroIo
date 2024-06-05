@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SuperheroDao {
-
     @Query("SELECT * FROM SuperheroEntity")
      fun getAllHeroes(): Flow<List<SuperheroEntity>>
 

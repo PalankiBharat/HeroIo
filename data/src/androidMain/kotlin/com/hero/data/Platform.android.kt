@@ -8,6 +8,7 @@ import com.hero.data.utils.ApiConstants.dbFileName
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.engine.okhttp.OkHttp
+import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import java.util.concurrent.TimeUnit
 
@@ -27,7 +28,7 @@ actual fun httpClient(config: HttpClientConfig<*>.()->Unit) = HttpClient(OkHttp)
     }
 }
 
- fun getSuperheroDatabase(context:Context): RoomDatabase.Builder<SuperheroDatabase> {
+fun getDatabaseBuilder(context: Context): RoomDatabase.Builder<SuperheroDatabase> {
     val appContext = context.applicationContext
     val dbFile = appContext.getDatabasePath(dbFileName)
     return Room.databaseBuilder<SuperheroDatabase>(
@@ -37,5 +38,7 @@ actual fun httpClient(config: HttpClientConfig<*>.()->Unit) = HttpClient(OkHttp)
 }
 
 actual fun platformModules() = module {
-
+    single {
+        getDatabaseBuilder(androidContext())
+    }
 }

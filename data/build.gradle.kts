@@ -7,6 +7,10 @@ plugins {
 }
 
 kotlin {
+    sourceSets.commonMain {
+        kotlin.srcDir("build/generated/ksp/metadata")
+    }
+
     androidTarget {
         compilations.all {
             kotlinOptions {
@@ -27,24 +31,30 @@ kotlin {
     }
 
     sourceSets {
-        commonMain.dependencies {
-            //Kotlin Coroutines
-            implementation(libs.kotlinx.coroutines.core)
 
-            //Koin
-            implementation(libs.koin.core)
+        commonMain{
+            dependencies {
 
-            //Ktor
-            implementation(libs.ktor.client.core)
-            //Only needed when you want to use Kotlin Serialization
-            implementation(libs.ktor.client.serialization)
-            implementation(libs.ktor.client.logging)
-            implementation(libs.ktor.client.content.negotiation)
-            implementation(libs.ktor.serialization.kotlinx.json)
+                //Kotlin Coroutines
+                implementation(libs.kotlinx.coroutines.core)
 
-            //Room
-            implementation(libs.androidx.room.runtime)
-            implementation(libs.sqlite.bundled)
+                //Koin
+                implementation(libs.koin.core)
+                implementation(libs.koin.annotations)
+
+
+                //Ktor
+                implementation(libs.ktor.client.core)
+                //Only needed when you want to use Kotlin Serialization
+                implementation(libs.ktor.client.serialization)
+                implementation(libs.ktor.client.logging)
+                implementation(libs.ktor.client.content.negotiation)
+                implementation(libs.ktor.serialization.kotlinx.json)
+
+                //Room
+                implementation(libs.androidx.room.runtime)
+                implementation(libs.sqlite.bundled)
+            }
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -54,15 +64,16 @@ kotlin {
         }
         androidMain.dependencies {
             implementation(libs.ktor.client.android)
+            implementation(libs.koin.android)
         }
     }
 }
 
 android {
     namespace = "com.hero.data"
-    compileSdk = 34
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
     defaultConfig {
-        minSdk = 25
+        minSdk = libs.versions.android.minSdk.get().toInt()
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -71,12 +82,16 @@ android {
 }
 
 dependencies {
-    add("kspAndroid", libs.androidx.room.compiler)
-    add("kspIosSimulatorArm64", libs.androidx.room.compiler)
-    add("kspIosX64", libs.androidx.room.compiler)
-    add("kspIosArm64", libs.androidx.room.compiler)
+    add("kspCommonMainMetadata", libs.koin.ksp.compiler)
+    add("kspCommonMainMetadata", libs.androidx.room.compiler)
 }
 
 room {
     schemaDirectory("$projectDir/schemas")
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinCompile<*>>().configureEach {
+    if (name != "kspCommonMainKotlinMetadata" ) {
+        dependsOn("kspCommonMainKotlinMetadata")
+    }
 }
