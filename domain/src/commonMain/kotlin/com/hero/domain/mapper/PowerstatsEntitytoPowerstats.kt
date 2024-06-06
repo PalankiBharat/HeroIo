@@ -1,9 +1,9 @@
 package com.hero.domain.mapper
 
-import com.hero.data.model.PowerStatsNetworkEnitity
+import com.hero.data.model.PowerStatsNetworkEntity
 import com.hero.domain.model.PowerStats
 
-fun PowerStatsNetworkEnitity.toPowerStats() : PowerStats = PowerStats(
+fun PowerStatsNetworkEntity.toPowerStats() : PowerStats = PowerStats(
     strength = strength,
     durability = durability,
     combat = combat,

@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.ksp)
 }
 
 kotlin {
@@ -29,7 +28,6 @@ kotlin {
     }*/
     sourceSets {
         commonMain{
-            kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
             dependencies {
                 //put your multiplatform dependencies here
                 implementation(project(":domain"))
@@ -40,17 +38,9 @@ kotlin {
                 //Koin
                 implementation(libs.koin.core)
                 implementation(libs.koin.composeVM)
-                implementation(libs.koin.annotations)
             }
         }
-        commonTest.dependencies {
-            implementation(libs.kotlin.test)
-        }
     }
-}
-
-dependencies {
-    add("kspCommonMainMetadata", libs.koin.ksp.compiler)
 }
 
 android {

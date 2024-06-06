@@ -2,6 +2,7 @@ package com.hero.data.di
 
 import androidx.room.RoomDatabase
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
+import com.hero.data.local.ImagesConverter
 import com.hero.data.local.SuperheroDatabase
 import com.hero.data.platformModules
 import kotlinx.coroutines.Dispatchers
@@ -39,6 +40,7 @@ fun instantiateDatabase(builder: () -> RoomDatabase.Builder<SuperheroDatabase>):
     return builder()
         .fallbackToDestructiveMigration(true)
         .setDriver(BundledSQLiteDriver())
+        .addTypeConverter(ImagesConverter())
         .setQueryCoroutineContext(Dispatchers.IO)
         .build()
 }

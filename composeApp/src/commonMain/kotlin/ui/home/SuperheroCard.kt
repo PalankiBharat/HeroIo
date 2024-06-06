@@ -32,10 +32,11 @@ fun SuperheroCard(modifier: Modifier = Modifier, superhero: Superhero) {
     ) {
         Row {
             AsyncImage(
-                modifier = Modifier.fillMaxWidth(0.4f),
+                modifier = Modifier.fillMaxWidth(0.4f).fillMaxHeight(),
                 model = superhero.imagesEntity?.midImage,
                 contentDescription = superhero.name
             )
+            println(superhero.imagesEntity?.midImage)
             SuperheroCardDetails(superhero = superhero)
         }
 

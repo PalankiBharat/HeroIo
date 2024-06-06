@@ -17,8 +17,7 @@ class SuperheroRepositoryImpl(
         val superheroList = api.getSuperHeroList()
         if (superheroList.isNotEmpty()) {
             replaceOldData(superheroes = superheroList.map {
-                item -> item?.toSuperheroEntity()
-            })
+                item -> item?.toSuperheroEntity() })
         }
     }
 

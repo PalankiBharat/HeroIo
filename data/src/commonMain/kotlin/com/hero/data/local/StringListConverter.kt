@@ -1,8 +1,9 @@
 package com.hero.data.local
 
+import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter
-import com.hero.data.model.ImagesEntity
-import com.hero.data.model.PowerStatsNetworkEnitity
+import com.hero.data.model.ImagesNetworkEntity
+import com.hero.data.model.PowerStatsNetworkEntity
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToJsonElement
 
@@ -20,24 +21,25 @@ class StringListConverter {
 
 class PowerStatsConverter {
     @TypeConverter
-    fun fromPowerStats(value: PowerStatsNetworkEnitity): String {
+    fun fromPowerStats(value: PowerStatsNetworkEntity): String {
         return Json.encodeToJsonElement(value).toString()
     }
 
     @TypeConverter
-    fun toPowerStats(json: String): PowerStatsNetworkEnitity {
+    fun toPowerStats(json: String): PowerStatsNetworkEntity {
         return Json.decodeFromString(json)
     }
 }
 
+@ProvidedTypeConverter
 class ImagesConverter {
     @TypeConverter
-    fun fromImages(value: ImagesEntity): String {
+    fun fromImages(value: ImagesNetworkEntity): String {
         return Json.encodeToJsonElement(value).toString()
     }
 
     @TypeConverter
-    fun toImages(json: String): ImagesEntity {
+    fun toImages(json: String): ImagesNetworkEntity {
         return Json.decodeFromString(json)
     }
 }

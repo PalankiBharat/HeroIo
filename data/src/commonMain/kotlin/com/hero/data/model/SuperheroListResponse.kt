@@ -2,7 +2,7 @@ package com.hero.data.model
 
 
 @kotlinx.serialization.Serializable
-data class PowerStatsNetworkEnitity(
+data class PowerStatsNetworkEntity(
 	val strength: Int? = null,
 	val durability: Int? = null,
 	val combat: Int? = null,
@@ -23,11 +23,11 @@ data class Appearance(
 
 @kotlinx.serialization.Serializable
 data class SuperheroNetworkEntity(
-	val imagesEntity: ImagesEntity? = null,
+	val images: ImagesNetworkEntity? = null,
 	val appearance: Appearance? = null,
 	val work: Work? = null,
 	val name: String? = null,
-	val powerstats: PowerStatsNetworkEnitity? = null,
+	val powerstats: PowerStatsNetworkEntity? = null,
 	val id: Int? = null,
 	val biography: Biography? = null,
 	val slug: String? = null,
@@ -47,7 +47,7 @@ data class Work(
 )
 
 @kotlinx.serialization.Serializable
-data class ImagesEntity(
+data class ImagesNetworkEntity(
 	val md: String? = null,
 	val sm: String? = null,
 	val xs: String? = null,
