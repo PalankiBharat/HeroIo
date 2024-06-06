@@ -35,7 +35,7 @@ open class SuperheroDetailsViewmodel(
                     _events.emit(HeroDetailsEvents.OnError(it.message))
                 }.onSuccess { result ->
                     _states.update { state ->
-                        state.copy(superheroList = result)
+                        state.copy(superheroList = result.shuffled())
                     }
                 }
             }

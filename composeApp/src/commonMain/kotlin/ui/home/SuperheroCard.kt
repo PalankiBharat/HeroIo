@@ -1,5 +1,6 @@
 package ui.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,25 +16,29 @@ import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
+import coil3.compose.LocalPlatformContext
+import coil3.request.ImageRequest
 import com.hero.domain.model.Superhero
 
 @Composable
 fun SuperheroCard(modifier: Modifier = Modifier, superhero: Superhero) {
     Card(
-        modifier = modifier.fillMaxWidth(),
-        shape = AbsoluteRoundedCornerShape(10.dp),
+        modifier = modifier.fillMaxWidth().padding(10.dp),
+        shape = AbsoluteRoundedCornerShape(16.dp),
         elevation = 10.dp,
         backgroundColor = Color.White
     ) {
         Row {
             AsyncImage(
-                modifier = Modifier.fillMaxWidth(0.4f).fillMaxHeight(),
+                modifier = Modifier.fillMaxWidth(0.4f).fillMaxHeight().background(Color.Black),
                 model = superhero.imagesEntity?.midImage,
+                contentScale = ContentScale.Crop,
                 contentDescription = superhero.name
             )
             println(superhero.imagesEntity?.midImage)
@@ -46,7 +51,7 @@ fun SuperheroCard(modifier: Modifier = Modifier, superhero: Superhero) {
 
 @Composable
 fun SuperheroCardDetails(superhero: Superhero) {
-    Column(modifier = Modifier.fillMaxWidth().padding(start = 8.dp, end = 12.dp)) {
+    Column(modifier = Modifier.fillMaxWidth().padding(start = 8.dp, end = 12.dp, top = 10.dp)) {
         Text(
             text = superhero.name,
             color = Color.Black,
@@ -74,7 +79,10 @@ fun SuperheroCardDetails(superhero: Superhero) {
         Row(modifier = Modifier.fillMaxWidth()) {
             Text(text = "More Info", color = Color.Black)
             Spacer(modifier = Modifier.weight(1f))
-            Icon(imageVector = Icons.AutoMirrored.Filled.ArrowForward, contentDescription = "More Info")
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                contentDescription = "More Info"
+            )
         }
     }
 }
