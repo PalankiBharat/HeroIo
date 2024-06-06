@@ -46,9 +46,7 @@ kotlin {
             implementation(compose.material3)
             implementation(compose.materialIconsExtended)
 
-            //  implementation(compose.uiTooling)
-
-
+            // Modules
             implementation(project(":viewmodels"))
             implementation(project(":domain"))
             implementation(project(":data"))
@@ -58,17 +56,22 @@ kotlin {
 
             //Koin
             implementation(libs.koin.core)
-
             implementation(libs.koin.compose)
             implementation(libs.koin.composeVM)
 
 
+            // Viewmodel KMP
             implementation(libs.androidx.lifecycle.viewmodel)
 
             //Coil
             implementation(libs.coil)
             implementation(libs.coil.ktor)
             implementation(libs.navigation.compose)
+
+
+            // Palette API for color extraction
+            implementation(libs.kmpalette.core)
+            implementation(libs.kmpalette.extensions.network)
 
 
         }

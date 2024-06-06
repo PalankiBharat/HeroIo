@@ -15,7 +15,6 @@ val LocalNavigationProvider = staticCompositionLocalOf<NavHostController> {
 @Composable
 fun AppNavHost() {
     val navHostController = LocalNavigationProvider.current
-
     NavHost(
         navController = navHostController,
         startDestination = AppNavigation.Home.route,

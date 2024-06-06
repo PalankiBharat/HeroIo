@@ -1,5 +1,6 @@
 package ui.home
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,7 +14,7 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
 
-@OptIn(KoinExperimentalAPI::class)
+@OptIn(KoinExperimentalAPI::class, ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(superheroDetailsViewmodel: SuperheroDetailsViewmodel = koinViewModel()) {
     val states = superheroDetailsViewmodel.states.collectAsState()
@@ -25,7 +26,7 @@ fun HomeScreen(superheroDetailsViewmodel: SuperheroDetailsViewmodel = koinViewMo
             items(items = states.value.superheroList, key = {
                 it.id
             }) {
-                SuperheroCard(modifier = Modifier.fillParentMaxHeight(0.2f), superhero = it)
+                SuperheroCard(modifier = Modifier.fillParentMaxHeight(0.2f).animateItemPlacement(), superhero = it)
             }
 
         }

@@ -14,7 +14,9 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -25,6 +27,9 @@ import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
 import com.hero.domain.model.Superhero
+import com.kmpalette.loader.rememberNetworkLoader
+import com.kmpalette.rememberDominantColorState
+import io.ktor.http.Url
 
 @Composable
 fun SuperheroCard(modifier: Modifier = Modifier, superhero: Superhero) {
@@ -34,7 +39,24 @@ fun SuperheroCard(modifier: Modifier = Modifier, superhero: Superhero) {
         elevation = 10.dp,
         backgroundColor = Color.White
     ) {
-        Row {
+        val imageUrl = superhero.imagesEntity?.smallImage
+        val networkLoader = rememberNetworkLoader()
+        val dominantColorState = rememberDominantColorState(loader = networkLoader)
+        LaunchedEffect(imageUrl) {
+            imageUrl?.let {
+                dominantColorState.updateFrom(Url(imageUrl))
+            }
+        }
+        Row(
+            modifier = Modifier.background(
+                brush = Brush.horizontalGradient(
+                    colors = listOf(
+                        dominantColorState.color,
+                        Color.Black
+                    )
+                )
+            ),
+        ) {
             AsyncImage(
                 modifier = Modifier.fillMaxWidth(0.4f).fillMaxHeight().background(Color.Black),
                 model = superhero.imagesEntity?.midImage,
