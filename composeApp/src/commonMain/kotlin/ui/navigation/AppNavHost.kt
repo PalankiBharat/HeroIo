@@ -32,5 +32,12 @@ sealed class AppNavigation(
     val route: String
 ) {
     data object Home : AppNavigation("Home")
-    data object Details : AppNavigation("Details")
+    data object Details : AppNavigation("Details/{id}"){
+        fun createRouteWithId(id: String): String {
+            return "Details/$id"
+        }
+        fun getId(backStackEntry: NavBackStackEntry): String? =
+            backStackEntry.arguments?.getString("id")
+    }
 }
+

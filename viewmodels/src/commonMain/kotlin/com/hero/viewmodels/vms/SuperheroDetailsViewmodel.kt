@@ -5,9 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.hero.data.utils.onError
 import com.hero.data.utils.onSuccess
 import com.hero.domain.useCases.SuperheroUseCase
-import com.hero.viewmodels.events.HeroDetailsEvents
-import com.hero.viewmodels.intents.SuperheroDetailsIntents
-import com.hero.viewmodels.viewStates.SuperheroListingViewStates
+import com.hero.viewmodels.events.SuperheroDetailsEvents
+import com.hero.viewmodels.events.SuperheroListingEvents
+import com.hero.viewmodels.intents.DetailsPageIntents
+import com.hero.viewmodels.intents.SuperheroListingIntents
+import com.hero.viewmodels.viewStates.SuperheroDetailsViewStates
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -21,21 +23,22 @@ open class SuperheroDetailsViewmodel(
     private val superheroUseCase: SuperheroUseCase
 ) : ViewModel(), KoinComponent {
 
-    private val _states = MutableStateFlow(SuperheroListingViewStates("", false, emptyList()))
-    val states: StateFlow<SuperheroListingViewStates> = _states
+    private val _states = MutableStateFlow(SuperheroDetailsViewStates())
+    val states: StateFlow<SuperheroDetailsViewStates> = _states
 
-    private val _events = MutableSharedFlow<HeroDetailsEvents>()
-    val events: SharedFlow<HeroDetailsEvents> = _events
+    private val _events = MutableSharedFlow<SuperheroDetailsEvents>()
+    val events: SharedFlow<SuperheroDetailsEvents> = _events
 
     init {
         viewModelScope.launch {
-            sendIntents(SuperheroDetailsIntents.GetDataFromNetwork)
             superheroUseCase.getSuperheroList().collectLatest {
                 it.onError {
-                    _events.emit(HeroDetailsEvents.OnError(it.message))
+                    _events.emit(SuperheroDetailsEvents.OnError(it.message))
                 }.onSuccess { result ->
+                    val superhero =
+                        result.find { superhero -> superhero.id == _states.value.selectedSuperheroId }
                     _states.update { state ->
-                        state.copy(superheroList = result.shuffled())
+                        state.copy(superheroList = result, selectedSuperhero = superhero)
                     }
                 }
             }
@@ -43,33 +46,22 @@ open class SuperheroDetailsViewmodel(
     }
 
 
-    fun sendIntents(events: SuperheroDetailsIntents) {
+    fun sendIntents(events: DetailsPageIntents) {
         viewModelScope.launch {
             when (events) {
-                SuperheroDetailsIntents.GetDataFromNetwork -> {
-                    _states.update {
-                        it.copy(isLoading = true)
-                    }
-                    superheroUseCase.getSuperhero().onSuccess {
-                        _states.update {
-                            it.copy(isLoading = false)
-                        }
-                    }.onError {
-                        _states.update {
-                            it.copy(isLoading = false)
-                        }
-                        _events.emit(HeroDetailsEvents.OnError(it.message))
-                    }
-                }
-
-                is SuperheroDetailsIntents.OnSearchEvent -> {
-                    _states.update {
-                        it.copy(searchQuery = events.query)
-                    }
+                is DetailsPageIntents.SetSelectedSuperhero -> {
+                    setSelectedSuperhero(events.id)
                 }
             }
         }
-
     }
+
+    private fun setSelectedSuperhero(id: String) {
+        val superhero = _states.value.superheroList?.find { superhero -> superhero.id == id }
+        _states.update {
+            it.copy(selectedSuperheroId = id, selectedSuperhero = superhero)
+        }
+    }
+
 
 }
