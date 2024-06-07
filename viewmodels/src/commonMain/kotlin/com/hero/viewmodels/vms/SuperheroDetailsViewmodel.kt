@@ -6,9 +6,7 @@ import com.hero.data.utils.onError
 import com.hero.data.utils.onSuccess
 import com.hero.domain.useCases.SuperheroUseCase
 import com.hero.viewmodels.events.SuperheroDetailsEvents
-import com.hero.viewmodels.events.SuperheroListingEvents
 import com.hero.viewmodels.intents.DetailsPageIntents
-import com.hero.viewmodels.intents.SuperheroListingIntents
 import com.hero.viewmodels.viewStates.SuperheroDetailsViewStates
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
