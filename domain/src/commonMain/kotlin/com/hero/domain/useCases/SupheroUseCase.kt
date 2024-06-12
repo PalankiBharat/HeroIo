@@ -23,6 +23,5 @@ class SuperheroUseCase(
         return safeApiCall {
             superheroRepository.getSuperheroListFromRemote()
         }
-
     }
 }

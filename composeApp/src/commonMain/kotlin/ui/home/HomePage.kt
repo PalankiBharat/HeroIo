@@ -1,6 +1,8 @@
 package ui.home
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,16 +11,20 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import com.hero.viewmodels.vms.SuperheroDetailsViewmodel
+import androidx.compose.ui.graphics.Color
+import com.hero.viewmodels.vms.SuperheroListingViewmodel
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
+import ui.navigation.AppNavigation
+import ui.navigation.LocalNavigationProvider
 
 
 @OptIn(KoinExperimentalAPI::class, ExperimentalFoundationApi::class)
 @Composable
-fun HomeScreen(superheroDetailsViewmodel: SuperheroDetailsViewmodel = koinViewModel()) {
-    val states = superheroDetailsViewmodel.states.collectAsState()
-    Column(modifier = Modifier.fillMaxSize()) {
+fun HomeScreen(superheroListingViewmodel: SuperheroListingViewmodel = koinViewModel()) {
+    val navController = LocalNavigationProvider.current
+    val states = superheroListingViewmodel.states.collectAsState()
+    Column(modifier = Modifier.fillMaxSize().background(Color.Black)) {
         Row {
 
         }
@@ -26,7 +32,18 @@ fun HomeScreen(superheroDetailsViewmodel: SuperheroDetailsViewmodel = koinViewMo
             items(items = states.value.superheroList, key = {
                 it.id
             }) {
-                SuperheroCard(modifier = Modifier.fillParentMaxHeight(0.2f).animateItemPlacement(), superhero = it)
+                SuperheroCard(
+                    modifier = Modifier.fillParentMaxHeight(0.2f)
+                        .animateItemPlacement()
+                        .clickable {
+                            navController.navigate(
+                                route = AppNavigation.Details.createRouteWithId(
+                                    it.id
+                                )
+                            )
+                        },
+                    superhero = it
+                )
             }
 
         }

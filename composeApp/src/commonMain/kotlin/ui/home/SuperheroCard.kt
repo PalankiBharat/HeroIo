@@ -29,8 +29,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
-import coil3.compose.LocalPlatformContext
-import coil3.request.ImageRequest
 import com.hero.domain.model.Superhero
 import com.kmpalette.loader.rememberNetworkLoader
 import com.kmpalette.rememberDominantColorState
@@ -60,8 +58,8 @@ fun SuperheroCard(modifier: Modifier = Modifier, superhero: Superhero) {
             modifier = Modifier.background(
                 brush = Brush.horizontalGradient(
                     colors = listOf(
+                        dominantColorState.color.copy(alpha = 0.5f),
                         dominantColorState.color,
-                        Color.Black
                     )
                 )
             ),
@@ -95,14 +93,10 @@ fun SuperheroCardDetails(superhero: Superhero) {
         )
         var bio = ""
         superhero.apply {
-            bio =
-                "Known by many names such as ${aliases?.joinToString(",")} born in $placeOfBirth. This superhero first appeared on $firstAppearance"
+            bio = "Known by many names such as ${aliases?.joinToString(",")} born in $placeOfBirth. This superhero first appeared on $firstAppearance"
         }
         Text(
-            text = bio,
-            color = Color.Black,
-            maxLines = 3,
-            overflow = TextOverflow.Ellipsis
+            text = bio, color = Color.Black, maxLines = 3, overflow = TextOverflow.Ellipsis
         )
 
         Spacer(modifier = Modifier.fillMaxHeight())
