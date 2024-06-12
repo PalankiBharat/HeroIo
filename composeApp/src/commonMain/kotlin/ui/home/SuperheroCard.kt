@@ -1,6 +1,7 @@
 package ui.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,8 +17,12 @@ import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -29,7 +34,11 @@ import coil3.request.ImageRequest
 import com.hero.domain.model.Superhero
 import com.kmpalette.loader.rememberNetworkLoader
 import com.kmpalette.rememberDominantColorState
+import heroio.composeapp.generated.resources.Res
+import heroio.composeapp.generated.resources.hero_bard_bg
 import io.ktor.http.Url
+import org.jetbrains.compose.resources.Resource
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun SuperheroCard(modifier: Modifier = Modifier, superhero: Superhero) {
@@ -106,6 +115,21 @@ fun SuperheroCardDetails(superhero: Superhero) {
                 contentDescription = "More Info"
             )
         }
+    }
+}
+
+@Composable
+fun SuperheroCardDetails(modifier: Modifier = Modifier) {
+    val painter = painterResource(resource = Res.drawable.hero_bard_bg)
+    Row(
+        modifier = Modifier.fillMaxWidth().drawBehind {
+            with(painter)
+            {
+                draw(size = size, colorFilter = ColorFilter.tint(Color.Blue))
+            }
+        }
+    ) {
+
     }
 }
 
