@@ -1,4 +1,3 @@
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.navigation.compose.rememberNavController
@@ -10,11 +9,12 @@ import coil3.request.crossfade
 import coil3.util.DebugLogger
 import ui.navigation.AppNavHost
 import ui.navigation.LocalNavigationProvider
+import ui.theme.AppTheme
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 fun App() {
-    MaterialTheme {
+    AppTheme {
         setSingletonImageLoaderFactory { context ->
             getAsyncImageLoader(context)
         }
