@@ -35,6 +35,9 @@ open class SuperheroListingViewmodel(
                     _events.emit(SuperheroListingEvents.OnError(it.message))
                 }.onSuccess { result ->
                     _states.update { state ->
+                        println("Race"+result.map {
+                            it.gender
+                        }.toSet().toString())
                         state.copy(superheroList = result.shuffled())
                     }
                 }

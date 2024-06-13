@@ -27,11 +27,10 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.Matrix
 import androidx.compose.ui.graphics.Outline
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.vector.PathParser
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -65,6 +64,7 @@ fun SuperheroCard(modifier: Modifier = Modifier, superhero: Superhero) {
                 dominantColorState.updateFrom(Url(imageUrl))
             }
         }
+
         Row(
             modifier = Modifier.background(
                 brush = Brush.horizontalGradient(
@@ -153,25 +153,90 @@ fun SuperheroCardNew(modifier: Modifier = Modifier, superhero: Superhero) {
                 .align(Alignment.CenterVertically)
                 .drawWithContent {
                     drawContent()
-                    val path = PathParser()
-                        .parsePathString("M 194.9 4 H 89.8 L 4 98.9 L 94 195 L 143 196 M 179 197 H 258 L 344 98.9 L 261.5 4 H 228.8 M 179.1 15.3 H 105.1 L 27.7 98.9 L 102.3 181.9 L 250.3 184.7 L 329.9 98.9 L 255.3 17.4 L 194.9 15.3")
-                        .toPath()
-                    // Composable size do not effect the path size so we need to scale it
-                    val matrix = Matrix()
-                    matrix.scale(
-                        0.8f, 0.8f
+                    val pathData = listOf(
+                        194.9f to 4f,
+                        89.8f to 4f,
+                        4f to 98.9f,
+                        94f to 195f,
+                        143f to 196f,
+                        179f to 197f,
+                        258f to 197f,
+                        344f to 98.9f,
+                        261.5f to 4f,
+                        228.8f to 4f,
+                        179.1f to 15.3f,
+                        105.1f to 15.3f,
+                        27.7f to 98.9f,
+                        102.3f to 181.9f,
+                        250.3f to 184.7f,
+                        329.9f to 98.9f,
+                        255.3f to 17.4f,
+                        194.9f to 15.3f
                     )
-                    path.transform(matrix)
+                    val maxX = pathData.maxOf { it.first }
+                    val maxY = pathData.maxOf { it.second }
+
+                    // Helper function to convert absolute coordinates to percentages
+                    fun toX(x: Float) = (x / maxX) * size.width
+                    fun toY(y: Float) = (y / maxY) * size.height
+
+                    val path = Path().apply {
+                        // Define path movements // These movements are defined in absolute coordinates and taken from the SVG
+                        val moves = listOf(
+                            listOf(
+                                194.9f to 4f,
+                                89.8f to 4f,
+                                4f to 98.9f,
+                                94f to 195f,
+                                143f to 196f
+                            ),
+                            listOf(
+                                179f to 197f,
+                                258f to 197f,
+                                344f to 98.9f,
+                                261.5f to 4f,
+                                228.8f to 4f
+                            ),
+                            listOf(
+                                179.1f to 15.3f,
+                                105.1f to 15.3f,
+                                27.7f to 98.9f,
+                                102.3f to 181.9f,
+                                250.3f to 184.7f,
+                                329.9f to 98.9f,
+                                255.3f to 17.4f,
+                                194.9f to 15.3f
+                            )
+                        )
+                        // Move to start point
+                        moveTo(toX(194.9f), toY(4f))
+
+                        // Iterate through moves to create the path
+                        moves.forEach { segment ->
+                            segment.forEachIndexed { index, (x, y) ->
+                                if (index == 0) moveTo(toX(x), toY(y)) else lineTo(toX(x), toY(y))
+                            }
+                        }
+                    }
+                    for (i in 0..100) {
+                        val percent = i.toFloat() / 100f
+                        drawPath(
+                            path = path,
+                            color = dominantColorState.color.copy(alpha = 0.1f * percent), // Semi-transparent black color for glow
+                            style = Stroke(width = 8.dp.toPx() * (1 - percent)),
+                        )
+                    }
+
                     drawPath(
                         path = path,
-                        style = Stroke(width = 4f),
-                        color = Color.White
+                        color = Color.White,
+                        style = Stroke(width = 2.dp.toPx())
                     )
                 }
                 .clip(MyCustomShape())
                 .padding(start = 6.dp)
-                .fillMaxWidth(0.24f)
-                .fillMaxHeight(0.42f),
+                .fillMaxWidth(0.27f)
+                .fillMaxHeight(0.5f),
             model = superhero.imagesEntity?.midImage,
             contentScale = ContentScale.FillBounds,
             contentDescription = superhero.name
@@ -213,18 +278,43 @@ class MyCustomShape() : Shape {
         layoutDirection: LayoutDirection,
         density: Density
     ): Outline {
-        val path = PathParser()
-            .parsePathString("M 195 16 M 179.084 15.296 H 105.096 L 27.72 98.884 L 102.272 181.908 L 250.248 184.732 L 329.88 98.884 L 255.328 17.372 L 194.896 15.296")
-            .toPath()
-        val matrix = Matrix()
-        matrix.scale(
-            0.8f, 0.8f
+        val pathData = listOf(
+            179.1f to 15.3f,
+            105.1f to 15.3f,
+            27.7f to 98.9f,
+            102.3f to 181.9f,
+            250.3f to 184.7f,
+            329.9f to 98.9f,
+            255.3f to 17.4f,
+            194.9f to 15.3f
         )
-        path.transform(matrix)
+
+        val maxX = pathData.maxOf { it.first }
+        val maxY = pathData.maxOf { it.second }
+
+        val width = size.width
+        val height = size.height
+
+        // Helper function to convert absolute coordinates to percentages
+        fun toX(x: Float) = (x / maxX) * width
+        fun toY(y: Float) = (y / maxY) * height
+
+        val path = Path().apply {
+            moveTo(toX(179.1f), toY(15.3f))
+            lineTo(toX(105.1f), toY(15.3f))
+            lineTo(toX(27.7f), toY(98.9f))
+            lineTo(toX(102.3f), toY(181.9f))
+            lineTo(toX(250.3f), toY(184.7f))
+            lineTo(toX(329.9f), toY(98.9f))
+            lineTo(toX(255.3f), toY(17.4f))
+            lineTo(toX(194.9f), toY(15.3f))
+            close()
+        }
         return Outline.Generic(
             path = path
         )
     }
 }
+
 
 
