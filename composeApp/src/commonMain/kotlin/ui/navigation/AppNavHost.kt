@@ -6,6 +6,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import ui.details.DetailsScreen
 import ui.home.HomeScreen
 
 val LocalNavigationProvider = staticCompositionLocalOf<NavHostController> {
@@ -22,8 +23,11 @@ fun AppNavHost() {
         composable(AppNavigation.Home.route) {
             HomeScreen()
         }
-        composable(AppNavigation.Details.route) {
-
+        composable(AppNavigation.Details.route) { navBackStackEntry ->
+            val id = AppNavigation.Details.getId(navBackStackEntry)
+            id?.let {
+                DetailsScreen(superheroId = id)
+            }
         }
     }
 }
@@ -32,10 +36,11 @@ sealed class AppNavigation(
     val route: String
 ) {
     data object Home : AppNavigation("Home")
-    data object Details : AppNavigation("Details/{id}"){
+    data object Details : AppNavigation("Details/{id}") {
         fun createRouteWithId(id: String): String {
             return "Details/$id"
         }
+
         fun getId(backStackEntry: NavBackStackEntry): String? =
             backStackEntry.arguments?.getString("id")
     }
