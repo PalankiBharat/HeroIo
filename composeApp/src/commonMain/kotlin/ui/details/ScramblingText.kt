@@ -4,7 +4,9 @@ import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -14,9 +16,10 @@ import kotlin.random.Random
 
 @Composable
 fun ScramblingText(
+    modifier: Modifier = Modifier,
     data: List<String>,
     delayMillis: Long = 1000,
-    pauseMillis: Long = 2000 // Pause after each word change
+    pauseMillis: Long = 3000 // Pause after each word change
 ) {
     var displayedText by remember { mutableStateOf(data.first()) }
     val scope = rememberCoroutineScope()
@@ -38,12 +41,12 @@ fun ScramblingText(
         }
     }
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
         BasicText(
             text = displayedText,
-            style = TextStyle(fontSize = 24.sp)
+            style = TextStyle(fontSize = 32.sp, color = Color.White, fontWeight = FontWeight.Bold)
         )
     }
 }
