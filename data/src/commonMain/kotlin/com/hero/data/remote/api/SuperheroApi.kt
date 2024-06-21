@@ -1,36 +1,25 @@
 package com.hero.data.remote.api
 
 import com.hero.data.model.SuperheroNetworkEntity
-import io.ktor.client.call.body
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.request.get
-import io.ktor.client.request.url
-import io.ktor.http.contentType
-import io.ktor.http.ContentType
-import com.hero.data.httpClient
 import com.hero.data.utils.ApiConstants.ALL_SUPERHEROES
 import com.hero.data.utils.ApiConstants.BASE_URL
 import com.hero.data.utils.ApiConstants.BY_ID
-import io.ktor.serialization.kotlinx.json.json
-import kotlinx.serialization.json.Json
+import io.ktor.client.call.body
+import io.ktor.client.request.get
+import io.ktor.client.request.url
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 import org.koin.core.annotation.Single
 
 @Single(binds = [SuperheroApiService::class])
 class SuperheroApi : SuperheroApiService {
-    private val httpClient = httpClient {
-        install(ContentNegotiation) {
-            json(json = Json {
-                ignoreUnknownKeys = true
-            })
-        }
-
-    }
+    private val httpClient = HttpClient.httpClient
 
     override suspend fun getSuperHeroList(): List<SuperheroNetworkEntity?> {
         val result = httpClient.get {
-                url(BASE_URL + ALL_SUPERHEROES)
-                contentType(ContentType.Application.Json)
-            }
+            url(BASE_URL + ALL_SUPERHEROES)
+            contentType(ContentType.Application.Json)
+        }
         return try {
             result.body()
         } catch (e: Exception) {
