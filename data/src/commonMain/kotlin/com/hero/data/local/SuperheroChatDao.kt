@@ -4,18 +4,17 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import com.hero.data.model.SuperheroChatEntity
-import com.hero.data.model.SuperheroEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SuperheroChatDao {
 
     @Query("SELECT * FROM SuperheroChatEntity WHERE superheroID = :id")
-    fun getAllChatsBySuperhero(id: String): Flow<List<SuperheroEntity>>
+    fun getAllChatsBySuperhero(id: String): Flow<List<SuperheroChatEntity>>
 
     @Insert
     suspend fun addChat(chatEntity: SuperheroChatEntity)
 
-    @Query("DELETE FROM SuperheroEntity WHERE superheroID = :id")
+    @Query("DELETE FROM SuperheroChatEntity WHERE superheroID = :id")
     suspend fun deleteAllChatOfSSuperhero(id: String)
 }

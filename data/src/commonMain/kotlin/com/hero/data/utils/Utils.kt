@@ -21,4 +21,3 @@ fun <T> Flow<T>.asResult(): Flow<Response<T>> {
             emit(Response.Error((it as Exception).getRealException()))
         }
 }
-

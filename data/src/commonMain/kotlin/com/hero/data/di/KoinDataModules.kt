@@ -26,6 +26,7 @@ val daoModule = module {
     }
     single {
         get<SuperheroDatabase>().superheroDao()
+        get<SuperheroDatabase>().superheroChatDao()
     }
     includes(
         listOf(
