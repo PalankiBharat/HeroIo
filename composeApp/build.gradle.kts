@@ -29,10 +29,25 @@ kotlin {
 
     sourceSets {
 
+        val commonMain by getting
+        val jbMain by creating {
+            dependsOn(commonMain)
+        }
+        val iosX64Main by getting
+        val iosArm64Main by getting
+        val iosSimulatorArm64Main by getting
+        val iosMain by creating {
+            dependsOn(jbMain)
+            iosX64Main.dependsOn(this)
+            iosArm64Main.dependsOn(this)
+            iosSimulatorArm64Main.dependsOn(this)
+        }
+
         androidMain.dependencies {
-            implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.koin.android)
+            implementation(libs.compose.ui.tooling.preview)
+
         }
 
         iosMain.dependencies {
@@ -44,6 +59,7 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.material3)
+            implementation(compose.components.uiToolingPreview)
             implementation(compose.materialIconsExtended)
 
             // Modules
@@ -109,14 +125,9 @@ android {
     }
     dependencies {
         debugImplementation(libs.compose.ui.tooling)
-        implementation(libs.compose.ui.tooling.preview)
-        implementation(libs.compose.ui)
-        implementation(libs.compose.material)
-        implementation(libs.compose.runtime)
-      //  debugImplementation(compose.uiTooling)
     }
-
 }
+
 
 
 
