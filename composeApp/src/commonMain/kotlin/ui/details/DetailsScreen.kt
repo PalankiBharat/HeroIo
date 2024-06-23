@@ -15,6 +15,10 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ChatBubbleOutline
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -46,8 +50,9 @@ import com.hero.viewmodels.intents.DetailsPageIntents
 import com.hero.viewmodels.vms.SuperheroDetailsViewmodel
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
+import ui.navigation.AppNavigation
+import ui.navigation.LocalNavigationProvider
 import kotlin.math.absoluteValue
-import kotlin.math.log
 import kotlin.math.sqrt
 
 @OptIn(KoinExperimentalAPI::class)
@@ -89,7 +94,7 @@ fun DetailsPager(
     superheroList: List<Superhero>,
     selectedSuperhero: Superhero
 ) {
-
+    val navController = LocalNavigationProvider.current
     val selectedIndex = superheroList.indexOfFirst { it == selectedSuperhero }
     val pagerState = rememberPagerState(initialPage = selectedIndex, pageCount = {
         superheroList.count()
@@ -107,7 +112,7 @@ fun DetailsPager(
                     ),
                     size = size
                 )
-            }   .pointerInput(Unit) {
+            }.pointerInput(Unit) {
                 detectTapGestures(
                     onPress = { offset ->
                         offsetY = offset.y
@@ -161,6 +166,20 @@ fun DetailsPager(
                 selectedSuperhero.fullName ?: "",
             )
         )
+
+        FloatingActionButton(onClick = {
+            navController.navigate(
+                route = AppNavigation.Chat.createRouteWithArgs(
+                    args = AppNavigation.Chat.ChatArguments(
+                        id = selectedSuperhero.id,
+                        name = selectedSuperhero.name,
+                        img = selectedSuperhero.imagesEntity?.midImage ?: ""
+                    )
+                )
+            )
+        }) {
+            Icon(imageVector = Icons.Filled.ChatBubbleOutline, contentDescription = "")
+        }
     }
 
 }

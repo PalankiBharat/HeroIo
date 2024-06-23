@@ -168,13 +168,4 @@ class MyCustomShape() : Shape {
     }
 }
 
-@Preview
-@Composable
-private fun CardPrev() {
-    Box {
-
-    }
-}
-
-
 

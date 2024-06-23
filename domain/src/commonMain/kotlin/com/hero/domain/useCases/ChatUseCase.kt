@@ -3,7 +3,6 @@ package com.hero.domain.useCases
 import Message
 import com.hero.data.repository.ChatRepository
 import com.hero.domain.model.SuperheroChat
-import kotlinx.coroutines.flow.lastOrNull
 import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Single
 
@@ -23,7 +22,7 @@ class ChatUseCase(
             }
         }
 
-    suspend fun sendChat(superheroChatEntity: SuperheroChat, superheroId: String) {
+    suspend fun sendChat(superheroChatEntity: SuperheroChat) {
         superheroChatRepository.sendChatToServer(
             superheroChatRequest = Message(superheroChatEntity.role,superheroChatEntity.message),
             superheroChatEntity.superheroID
