@@ -19,6 +19,21 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.withTransform
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
+import heroio.composeapp.generated.resources.Res
+import heroio.composeapp.generated.resources.alignment_evil
+import heroio.composeapp.generated.resources.alignment_good
+import heroio.composeapp.generated.resources.alignment_neutral
+import heroio.composeapp.generated.resources.gender_female
+import heroio.composeapp.generated.resources.gender_male
+import heroio.composeapp.generated.resources.gender_neutral
+import heroio.composeapp.generated.resources.publisher_marvel
+import heroio.composeapp.generated.resources.publisher_other
+import heroio.composeapp.generated.resources.publisher_sony
+import heroio.composeapp.generated.resources.publisher_startrek
+import heroio.composeapp.generated.resources.publisher_universal
+import heroio.composeapp.generated.resources.race_inhuman
+import heroio.composeapp.generated.resources.race_xmen
+import org.jetbrains.compose.resources.DrawableResource
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -117,3 +132,141 @@ fun DrawScope.drawUpperHalfHexagon() {
 }
 
 fun Double.toRadians(): Double = this * PI / 180.0
+
+
+fun getRaceImage(race: String): DrawableResource {
+    val mutants = setOf("Mutant", "Mutant / Clone")
+    val humans = setOf(
+        "Human",
+        "Human / Radiation",
+        "Human / Cosmic",
+        "Human / Altered",
+        "Human / Clone",
+        "Human-Kree",
+        "Human-Vuldarian",
+        "Human-Vulcan",
+        "Human-Spartoi"
+    )
+    val aliens = setOf(
+        "Icthyo Sapien",
+        "Ungaran",
+        "Cosmic Entity",
+        "Xenomorph XX121",
+        "Android",
+        "Symbiote",
+        "Atlantean",
+        "Alien",
+        "Neyaphem",
+        "New God",
+        "Alpha",
+        "Bizarro",
+        "Inhuman",
+        "Metahuman",
+        "Kryptonian",
+        "Kakarantharaian",
+        "Black Racer",
+        "Zen-Whoberian",
+        "Strontian",
+        "Kaiju",
+        "Saiyan",
+        "Gorilla",
+        "Rodian",
+        "Flora Colossus",
+        "Gungan",
+        "Bolovaxian",
+        "Czarnian",
+        "Martian",
+        "Spartoi",
+        "Luphomoid",
+        "Parademon",
+        "Yautja",
+        "Clone",
+        "Talokite",
+        "Korugaran",
+        "Zombie",
+        "Tamaranean",
+        "Frost Giant",
+        "Yoda's species"
+    )
+    val mythicalCreatures = setOf("Vampire", "Demon", "Maiar", "Amazon")
+    val inhumans = setOf("Inhuman")
+    val gods = setOf("God / Eternal", "New God", "Asgardian", "Demi-God", "Eternal")
+
+    return when (race) {
+        in mutants -> Res.drawable.race_xmen
+        in humans -> Res.drawable.race_xmen
+        in aliens -> Res.drawable.race_xmen
+        in mythicalCreatures -> Res.drawable.race_xmen
+        in inhumans -> Res.drawable.race_xmen
+        in gods -> Res.drawable.race_xmen
+        else -> Res.drawable.race_inhuman
+    }
+}
+
+fun getPublisherImage(publisher: String): DrawableResource {
+    return when (publisher) {
+        in listOf(
+            "Marvel Comics", "Giant-Man", "Toxin", "Angel", "Goliath", "Spoiler", "Icon Comics",
+            "Deadpool", "Evil Deadpool", "Jean Grey", "Phoenix", "Ms Marvel II", "Rune King Thor",
+            "Anti-Venom", "Scorpion", "Vindicator II", "Anti-Vision", "Thunderbird II", "Ant-Man",
+            "Venom III", "Spider-Carnage", "Angel Salvadore"
+        ) -> Res.drawable.publisher_marvel
+
+        in listOf(
+            "DC Comics",
+            "Oracle",
+            "Nightwing",
+            "Wildstorm",
+            "Batman II",
+            "Batgirl",
+            "Batgirl III",
+            "Batgirl V",
+            "Robin II",
+            "Robin III",
+            "Red Hood",
+            "Red Robin",
+            "Superman Prime One-Million",
+            "Black Racer",
+            "Speed Demon",
+            "Flash IV"
+        ) -> Res.drawable.publisher_marvel
+
+        "Star Trek" -> Res.drawable.publisher_startrek
+
+        "Sony Pictures" -> Res.drawable.publisher_sony
+
+        "Universal Studios" -> Res.drawable.publisher_universal
+
+        in listOf(
+            "Dark Horse Comics", "NBC - Heroes", "SyFy", "Archangel", "Tempest", "Gemini V",
+            "South Park", "Binary", "ABC Studios", "George Lucas", "Meltdown", "Titan Books",
+            "Power Woman", "Rebellion", "Iron Lad", "Power Man", "Image Comics", "Microsoft",
+            "Boom-Boom", "J. K. Rowling", "J. R. R. Tolkien", "Aztar"
+        ) -> Res.drawable.publisher_other
+
+        else -> Res.drawable.publisher_other
+    }
+}
+
+fun getGenderImage(gender: String): DrawableResource {
+    return when (gender) {
+        "Male" -> Res.drawable.gender_male
+        "Female" -> Res.drawable.gender_female
+        else -> Res.drawable.gender_neutral
+    }
+}
+
+fun getAlignmentImage(alignment: String): DrawableResource {
+    return when (alignment) {
+        "good" -> Res.drawable.alignment_good
+        "bad" -> Res.drawable.alignment_evil
+        else -> Res.drawable.alignment_neutral
+    }
+}
+
+
+
+
+
+
+

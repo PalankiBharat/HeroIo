@@ -6,10 +6,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
@@ -17,8 +21,10 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChatBubbleOutline
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -45,13 +51,24 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import com.hero.domain.model.PowerStats
 import com.hero.domain.model.Superhero
+import com.hero.viewmodels.events.SuperheroDetailsEvents
 import com.hero.viewmodels.intents.DetailsPageIntents
 import com.hero.viewmodels.vms.SuperheroDetailsViewmodel
+import heroio.composeapp.generated.resources.Res
+import heroio.composeapp.generated.resources.health
+import heroio.composeapp.generated.resources.heart
+import heroio.composeapp.generated.resources.muscle
+import heroio.composeapp.generated.resources.shield
+import heroio.composeapp.generated.resources.speed
+import heroio.composeapp.generated.resources.swords
+import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 import ui.navigation.AppNavigation
 import ui.navigation.LocalNavigationProvider
+import ui.theme.yellow
 import kotlin.math.absoluteValue
 import kotlin.math.sqrt
 
@@ -63,7 +80,7 @@ fun DetailsScreen(
     superheroId: String
 ) {
     val state = viewmodel.states.collectAsState().value
-    val events = viewmodel.events
+    val events by viewmodel.events.collectAsState(SuperheroDetailsEvents.None)
     LaunchedEffect(
         key1 = Unit
     ) {
@@ -80,11 +97,111 @@ fun DetailsScreen(
                 modifier = Modifier.fillMaxHeight(0.6f),
                 superheroList = state.superheroList ?: emptyList(),
                 selectedSuperhero = it
-            )
+            ) {
+                viewmodel.sendIntents(DetailsPageIntents.SetSelectedSuperhero(it.id))
+            }
         }
+        SuperheroDetails(superhero = it)
 
     }
 }
+
+@Composable
+fun SuperheroDetails(modifier: Modifier = Modifier, superhero: Superhero) {
+    Column(
+        modifier = Modifier.fillMaxSize()
+            .scrollable(orientation = Orientation.Vertical, state = rememberScrollState())
+    ) {
+        superhero.apply {
+            Text("Hero Characteristics", style = MaterialTheme.typography.bodyLarge)
+            CharacteristicRow(
+                modifier = Modifier.padding(top = 12.dp),
+                race = race ?: "",
+                gender = gender ?: "",
+                alignment = alignment ?: "",
+                publisher = publisher ?: ""
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+
+        }
+    }
+}
+
+@Composable
+fun CharacteristicRow(
+    modifier: Modifier = Modifier,
+    race: String,
+    gender: String,
+    alignment: String,
+    publisher: String
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceEvenly
+    ) {
+        CharacteristicLabel(value = race, image = painterResource(getRaceImage(race)))
+        CharacteristicLabel(value = gender, image = painterResource(getGenderImage(gender)))
+        CharacteristicLabel(
+            value = alignment,
+            image = painterResource(getAlignmentImage(alignment))
+        )
+        CharacteristicLabel(
+            value = publisher,
+            image = painterResource(getPublisherImage(publisher))
+        )
+    }
+}
+
+@Composable
+fun CharacterStatsColumn(modifier: Modifier = Modifier, powerStats: PowerStats) {
+    Column {
+        Row(
+            modifier = modifier,
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            StatsBar(
+                progress = powerStats.power.toSafePercentage(),
+                backgroundColor = yellow,
+                color = yellow,
+                image = Res.drawable.muscle
+            )
+            StatsBar(
+                progress = powerStats.strength.toSafePercentage(),
+                backgroundColor = yellow,
+                color = yellow,
+                image = Res.drawable.health
+            )
+            StatsBar(
+                progress = powerStats.speed.toSafePercentage(),
+                backgroundColor = yellow,
+                color = yellow,
+                image = Res.drawable.speed
+            )
+            StatsBar(
+                progress = powerStats.intelligence.toSafePercentage(),
+                backgroundColor = yellow,
+                color = yellow,
+                image = Res.drawable.heart
+            )
+            StatsBar(
+                progress = powerStats.durability.toSafePercentage(),
+                backgroundColor = yellow,
+                color = yellow,
+                image = Res.drawable.shield
+            )
+            StatsBar(
+                progress = powerStats.combat.toSafePercentage(),
+                backgroundColor = yellow,
+                color = yellow,
+                image = Res.drawable.swords
+            )
+        }
+    }
+}
+
+fun Int?.toSafePercentage(): Float = this?.toFloat()?.div(100f) ?: 0f
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -92,7 +209,8 @@ fun DetailsScreen(
 fun DetailsPager(
     modifier: Modifier = Modifier,
     superheroList: List<Superhero>,
-    selectedSuperhero: Superhero
+    selectedSuperhero: Superhero,
+    onHeroChange: (Superhero) -> Unit
 ) {
     val navController = LocalNavigationProvider.current
     val selectedIndex = superheroList.indexOfFirst { it == selectedSuperhero }
@@ -100,6 +218,13 @@ fun DetailsPager(
         superheroList.count()
     })
     var offsetY by remember { mutableStateOf(0f) }
+    LaunchedEffect(key1 = pagerState.currentPage)
+    {
+        onHeroChange(superheroList.getOrElse(pagerState.currentPage) {
+            selectedSuperhero
+        }
+        )
+    }
 
     Box {
         HorizontalPager(

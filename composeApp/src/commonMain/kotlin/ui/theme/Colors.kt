@@ -4,14 +4,11 @@ import androidx.compose.ui.graphics.Color
 
 val appBG = Color.Black
 val themeColor = Color(0xFF00FFB2)
-
-fun Color.brightenRGB(factor: Float): Color {
-    return Color(
-        red = (this.red + factor).coerceIn(0f, 1f),
-        green = (this.green + factor).coerceIn(0f, 1f),
-        blue = (this.blue + factor).coerceIn(0f, 1f)
-    )
-}
+val yellow = Color(0xFFE8ED03)
+val green = Color(0xFF00FFF0)
+val red = Color(0xFFD80606)
+val orange = Color(0xFFFF5333)
+val purple = Color(0xFFAC31E6)
 
 fun Color.toHSL(): FloatArray {
     val r = red

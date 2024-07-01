@@ -1,8 +1,10 @@
 package ui.details
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,6 +17,8 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun StatsBar(
@@ -22,44 +26,50 @@ fun StatsBar(
     color: Color,
     backgroundColor: Color,
     progress: Float,
-    cornerRadius: Dp
+    cornerRadius: Dp = 10.dp,
+    image:DrawableResource
 ) {
-    Box(
-        modifier = modifier
-            .border(
-                width = 1.2.dp,
-                shape = RoundedCornerShape(size = cornerRadius),
-                color = color
-            )
-    ) {
-        Canvas(
+    Row(modifier = modifier) {
+        Image(painter = painterResource(image), contentDescription = "Stats", modifier= Modifier.padding(end = 6.dp))
+        Box(
             modifier = Modifier
-                .fillMaxWidth(progress)
-                .height(20.dp)
-                .padding(6.dp)
-        ) {
-            val size = size
-            drawRoundRect(
-                brush = Brush.horizontalGradient(
-                    colors = listOf(
-                        Color.Transparent,
-                        color,
-                        color
-                    )
-                ),
-                cornerRadius = CornerRadius(cornerRadius.toPx(), cornerRadius.toPx())
-            )
-            val brush = Brush.verticalGradient(
-                colors = listOf(
-                    backgroundColor,
-                    color,
+                .fillMaxWidth()
+                .border(
+                    width = 1.2.dp,
+                    shape = RoundedCornerShape(size = cornerRadius),
+                    color = color
                 )
-            )
-            drawCircle(
-                brush = brush,
-                center = Offset(x = size.width - size.height / 2, y = size.height / 2),
-                radius = size.height / 1.2f
-            )
+        ) {
+            Canvas(
+                modifier = Modifier
+                    .fillMaxWidth(progress)
+                    .height(20.dp)
+                    .padding(6.dp)
+            ) {
+                val size = size
+                drawRoundRect(
+                    brush = Brush.horizontalGradient(
+                        colors = listOf(
+                            Color.Transparent,
+                            color,
+                            color
+                        )
+                    ),
+                    cornerRadius = CornerRadius(cornerRadius.toPx(), cornerRadius.toPx())
+                )
+                val brush = Brush.verticalGradient(
+                    colors = listOf(
+                        backgroundColor,
+                        color,
+                    )
+                )
+                drawCircle(
+                    brush = brush,
+                    center = Offset(x = size.width - size.height / 2, y = size.height / 2),
+                    radius = size.height / 1.2f
+                )
+            }
         }
     }
+
 }
