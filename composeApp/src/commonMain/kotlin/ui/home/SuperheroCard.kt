@@ -80,7 +80,8 @@ fun SuperheroCardNew(modifier: Modifier = Modifier, superhero: Superhero) {
                         val percent = i.toFloat() / 100f
                         drawPath(
                             path = glowPath,
-                            color = dominantColorState.color.brighten(0.2f).copy(alpha = (1f - percent) / 25f), // Semi-transparent color for glow
+                            color = dominantColorState.color.brighten(0.2f)
+                                .copy(alpha = (1f - percent) / 25f), // Semi-transparent color for glow
                             style = Stroke(width = 9.dp.toPx() * (percent)),
                         )
 
@@ -132,7 +133,6 @@ fun SuperheroCardNew(modifier: Modifier = Modifier, superhero: Superhero) {
 
     }
 }
-
 
 class MyCustomShape() : Shape {
     override fun createOutline(

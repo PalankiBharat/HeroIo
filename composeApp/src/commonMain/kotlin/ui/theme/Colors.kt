@@ -9,6 +9,7 @@ val green = Color(0xFF00FFF0)
 val red = Color(0xFFD80606)
 val orange = Color(0xFFFF5333)
 val purple = Color(0xFFAC31E6)
+val blue = Color(0xFF0057F4)
 
 fun Color.toHSL(): FloatArray {
     val r = red

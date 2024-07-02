@@ -64,14 +64,21 @@ import heroio.composeapp.generated.resources.Res
 import heroio.composeapp.generated.resources.health
 import heroio.composeapp.generated.resources.heart
 import heroio.composeapp.generated.resources.muscle
+import heroio.composeapp.generated.resources.shield
 import heroio.composeapp.generated.resources.speed
+import heroio.composeapp.generated.resources.swords
 import io.ktor.http.Url
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 import ui.navigation.AppNavigation
 import ui.navigation.LocalNavigationProvider
+import ui.theme.blue
 import ui.theme.brighten
+import ui.theme.green
+import ui.theme.orange
+import ui.theme.purple
+import ui.theme.red
 import ui.theme.yellow
 import kotlin.math.absoluteValue
 import kotlin.math.sqrt
@@ -89,6 +96,10 @@ fun DetailsScreen(
         key1 = Unit
     ) {
         viewmodel.sendIntents(DetailsPageIntents.SetSelectedSuperhero(superheroId))
+    }
+
+    LaunchedEffect(key1 = state.selectedSuperhero) {
+        println("Stats " + state.selectedSuperhero?.powerStats.toString())
     }
     state.selectedSuperhero?.let {
         Column(
@@ -203,65 +214,66 @@ fun CharacteristicRow(
 
 @Composable
 fun CharacterStatsColumn(modifier: Modifier = Modifier, powerStats: PowerStats) {
-    Column {
+    Column(modifier = modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Row(
-            modifier = modifier,
+            modifier = Modifier,
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             StatsBar(
-                progress = powerStats.power.toSafePercentage(),
-                backgroundColor = yellow,
+                modifier = Modifier.weight(1f),
+                progress = powerStats.combat.toSafePercentage(),
                 color = yellow,
-                image = Res.drawable.muscle
+                image = Res.drawable.swords
             )
             StatsBar(
+                modifier = Modifier.weight(1f),
+                //took as health
                 progress = powerStats.strength.toSafePercentage(),
-                backgroundColor = yellow,
-                color = yellow,
+                color = green,
                 image = Res.drawable.health
             )
         }
         Row(
-            modifier = modifier,
+            modifier = Modifier.padding(top = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             StatsBar(
+                modifier = Modifier.weight(1f),
                 progress = powerStats.speed.toSafePercentage(),
-                backgroundColor = yellow,
-                color = yellow,
+                color = purple,
                 image = Res.drawable.speed
             )
             StatsBar(
+                modifier = Modifier.weight(1f),
                 progress = powerStats.intelligence.toSafePercentage(),
-                backgroundColor = yellow,
-                color = yellow,
-                image = Res.drawable.heart
+                color = blue,
+                image = Res.drawable.shield
             )
         }
         Row(
-            modifier = modifier,
+            modifier = Modifier.padding(top = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             StatsBar(
+                modifier = Modifier.weight(1f),
                 progress = powerStats.combat.toSafePercentage(),
-                backgroundColor = yellow,
-                color = yellow,
-                image = Res.drawable.speed
+                color = orange,
+                image = Res.drawable.muscle
             )
             StatsBar(
-                progress = powerStats.intelligence.toSafePercentage(),
-                backgroundColor = yellow,
-                color = yellow,
+                modifier = Modifier.weight(1f),
+                progress = powerStats.durability.toSafePercentage(),
+                color = red,
                 image = Res.drawable.heart
             )
         }
     }
 }
 
-fun Int?.toSafePercentage(): Float = this?.toFloat()?.div(100f) ?: 0f
+fun Int?.toSafePercentage(): Float = this?.toFloat()?.coerceAtMost(100f)?.div(100f) ?: 0f
 
 
 @OptIn(ExperimentalFoundationApi::class)
