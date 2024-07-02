@@ -20,6 +20,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -35,6 +36,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
@@ -97,25 +99,26 @@ fun DetailsScreen(
     ) {
         viewmodel.sendIntents(DetailsPageIntents.SetSelectedSuperhero(superheroId))
     }
-
-    LaunchedEffect(key1 = state.selectedSuperhero) {
-        println("Stats " + state.selectedSuperhero?.powerStats.toString())
-    }
     state.selectedSuperhero?.let {
-        Column(
-            modifier = Modifier.background(Color.Black).scrollable(
+        Box(
+            modifier = Modifier.background(Color.Black).fillMaxSize().scrollable(
                 state = rememberScrollState(initial = 0),
                 orientation = Orientation.Vertical
             )
         ) {
             DetailsPager(
-                modifier = Modifier.fillMaxHeight(0.6f),
+                modifier = Modifier.fillMaxHeight(0.6f).align(Alignment.TopCenter),
                 superheroList = state.superheroList ?: emptyList(),
                 selectedSuperhero = it
             ) {
                 viewmodel.sendIntents(DetailsPageIntents.SetSelectedSuperhero(it.id))
             }
-            SuperheroDetails(superhero = it)
+            SuperheroDetails(
+                superhero = it,
+                modifier = Modifier.align(Alignment.BottomCenter).fillMaxHeight(0.45f).clip(
+                    RoundedCornerShape(20.dp)
+                )
+            )
         }
 
     }
@@ -357,7 +360,7 @@ fun DetailsPager(
         }
 
         ScramblingText(
-            modifier = Modifier.align(Alignment.BottomStart).padding(20.dp),
+            modifier = Modifier.align(Alignment.BottomStart).padding(20.dp).padding(bottom = 30.dp),
             data = listOf(
                 selectedSuperhero.name,
                 selectedSuperhero.fullName ?: "",

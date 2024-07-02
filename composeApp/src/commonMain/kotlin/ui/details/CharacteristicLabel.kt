@@ -30,6 +30,7 @@ import heroio.composeapp.generated.resources.alignment_neutral
 import heroio.composeapp.generated.resources.gender_female
 import heroio.composeapp.generated.resources.gender_male
 import heroio.composeapp.generated.resources.gender_neutral
+import heroio.composeapp.generated.resources.publisher_dc
 import heroio.composeapp.generated.resources.publisher_marvel
 import heroio.composeapp.generated.resources.publisher_other
 import heroio.composeapp.generated.resources.publisher_sony
@@ -77,7 +78,8 @@ fun CharacteristicLabel(
             text = value.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() },
             modifier = Modifier.padding(top = 4.dp).fillMaxWidth(0.7f),
             color = Color.White,
-            style = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.Center)
+            style = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.Center),
+            maxLines = 1
         )
     }
 
@@ -249,7 +251,7 @@ fun getPublisherImage(publisher: String): DrawableResource {
             "Black Racer",
             "Speed Demon",
             "Flash IV"
-        ) -> Res.drawable.publisher_marvel
+        ) -> Res.drawable.publisher_dc
 
         "Star Trek" -> Res.drawable.publisher_startrek
 
