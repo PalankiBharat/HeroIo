@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
@@ -47,6 +48,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -56,18 +58,20 @@ import com.hero.domain.model.Superhero
 import com.hero.viewmodels.events.SuperheroDetailsEvents
 import com.hero.viewmodels.intents.DetailsPageIntents
 import com.hero.viewmodels.vms.SuperheroDetailsViewmodel
+import com.kmpalette.loader.rememberNetworkLoader
+import com.kmpalette.rememberDominantColorState
 import heroio.composeapp.generated.resources.Res
 import heroio.composeapp.generated.resources.health
 import heroio.composeapp.generated.resources.heart
 import heroio.composeapp.generated.resources.muscle
-import heroio.composeapp.generated.resources.shield
 import heroio.composeapp.generated.resources.speed
-import heroio.composeapp.generated.resources.swords
+import io.ktor.http.Url
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 import ui.navigation.AppNavigation
 import ui.navigation.LocalNavigationProvider
+import ui.theme.brighten
 import ui.theme.yellow
 import kotlin.math.absoluteValue
 import kotlin.math.sqrt
@@ -100,28 +104,59 @@ fun DetailsScreen(
             ) {
                 viewmodel.sendIntents(DetailsPageIntents.SetSelectedSuperhero(it.id))
             }
+            SuperheroDetails(superhero = it)
         }
-        SuperheroDetails(superhero = it)
 
     }
 }
 
 @Composable
 fun SuperheroDetails(modifier: Modifier = Modifier, superhero: Superhero) {
+    val imageUrl = superhero.imagesEntity?.midImage
+    val networkLoader = rememberNetworkLoader()
+    val dominantColorState = rememberDominantColorState(loader = networkLoader)
+    LaunchedEffect(imageUrl) {
+        imageUrl?.let {
+            dominantColorState.updateFrom(Url(imageUrl))
+        }
+    }
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize()
+            .background(Color.Black)
             .scrollable(orientation = Orientation.Vertical, state = rememberScrollState())
     ) {
         superhero.apply {
-            Text("Hero Characteristics", style = MaterialTheme.typography.bodyLarge)
+            Text(
+                "Hero Characteristics",
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    color = Color.White,
+                    fontWeight = FontWeight.SemiBold
+                ),
+                modifier = Modifier.fillMaxWidth(0.9f).align(Alignment.CenterHorizontally)
+            )
             CharacteristicRow(
-                modifier = Modifier.padding(top = 12.dp),
+                modifier = Modifier.fillMaxWidth(0.9f).align(Alignment.CenterHorizontally)
+                    .padding(top = 20.dp),
                 race = race ?: "",
                 gender = gender ?: "",
                 alignment = alignment ?: "",
-                publisher = publisher ?: ""
+                publisher = publisher ?: "",
+                color = dominantColorState.color.brighten(0.2f)
             )
             Spacer(modifier = Modifier.height(10.dp))
+
+            CharacterStatsColumn(
+                modifier = Modifier.fillMaxWidth(0.9f).align(Alignment.CenterHorizontally)
+                    .padding(top = 20.dp),
+                powerStats = powerStats ?: PowerStats(
+                    strength = 0,
+                    durability = 0,
+                    combat = 0,
+                    power = 0,
+                    speed = 0,
+                    intelligence = 0
+                )
+            )
 
         }
     }
@@ -133,22 +168,35 @@ fun CharacteristicRow(
     race: String,
     gender: String,
     alignment: String,
-    publisher: String
+    publisher: String,
+    color: Color
 ) {
     Row(
         modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceEvenly
+        verticalAlignment = Alignment.Top,
+        horizontalArrangement = Arrangement.SpaceAround
     ) {
-        CharacteristicLabel(value = race, image = painterResource(getRaceImage(race)))
-        CharacteristicLabel(value = gender, image = painterResource(getGenderImage(gender)))
         CharacteristicLabel(
-            value = alignment,
-            image = painterResource(getAlignmentImage(alignment))
+            modifier = Modifier.weight(1f),
+            value = race, image = painterResource(getRaceImage(race)),
+            color = color
         )
         CharacteristicLabel(
+            modifier = Modifier.weight(1f),
+            value = gender, image = painterResource(getGenderImage(gender)),
+            color = color
+        )
+        CharacteristicLabel(
+            modifier = Modifier.weight(1f),
+            value = alignment,
+            image = painterResource(getAlignmentImage(alignment)),
+            color = color
+        )
+        CharacteristicLabel(
+            modifier = Modifier.weight(1f),
             value = publisher,
-            image = painterResource(getPublisherImage(publisher))
+            image = painterResource(getPublisherImage(publisher)),
+            color = color
         )
     }
 }
@@ -173,6 +221,12 @@ fun CharacterStatsColumn(modifier: Modifier = Modifier, powerStats: PowerStats) 
                 color = yellow,
                 image = Res.drawable.health
             )
+        }
+        Row(
+            modifier = modifier,
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
             StatsBar(
                 progress = powerStats.speed.toSafePercentage(),
                 backgroundColor = yellow,
@@ -185,17 +239,23 @@ fun CharacterStatsColumn(modifier: Modifier = Modifier, powerStats: PowerStats) 
                 color = yellow,
                 image = Res.drawable.heart
             )
-            StatsBar(
-                progress = powerStats.durability.toSafePercentage(),
-                backgroundColor = yellow,
-                color = yellow,
-                image = Res.drawable.shield
-            )
+        }
+        Row(
+            modifier = modifier,
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
             StatsBar(
                 progress = powerStats.combat.toSafePercentage(),
                 backgroundColor = yellow,
                 color = yellow,
-                image = Res.drawable.swords
+                image = Res.drawable.speed
+            )
+            StatsBar(
+                progress = powerStats.intelligence.toSafePercentage(),
+                backgroundColor = yellow,
+                color = yellow,
+                image = Res.drawable.heart
             )
         }
     }

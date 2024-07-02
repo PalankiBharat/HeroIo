@@ -1,11 +1,14 @@
 package ui.details
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,6 +21,7 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.withTransform
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import heroio.composeapp.generated.resources.Res
 import heroio.composeapp.generated.resources.alignment_evil
@@ -34,36 +38,52 @@ import heroio.composeapp.generated.resources.publisher_universal
 import heroio.composeapp.generated.resources.race_inhuman
 import heroio.composeapp.generated.resources.race_xmen
 import org.jetbrains.compose.resources.DrawableResource
+import ui.theme.themeColor
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
 @Composable
-fun CharacteristicLabel(modifier: Modifier = Modifier, value: String, image: Painter) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+fun CharacteristicLabel(
+    modifier: Modifier = Modifier,
+    value: String,
+    image: Painter,
+    color: Color = themeColor
+) {
+    Column(
+        verticalArrangement = Arrangement.Center,
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Box(modifier = Modifier
+            .fillMaxWidth(0.7f)
             .aspectRatio(1f)
             .drawBehind {
                 drawUpperHalfHexagon()
             }
             .drawBehind {
-                drawHexagon()
+                drawHexagon(color = color)
             }
         ) {
             Image(
                 painter = image,
-                contentDescription = "asd",
+                contentDescription = value,
                 modifier = Modifier
-                    .fillMaxSize(0.7f)
+                    .fillMaxSize(0.45f)
                     .align(Alignment.Center)
             )
         }
-        Text(text = value, modifier = Modifier.padding(top = 10.dp))
+        Text(
+            text = value.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() },
+            modifier = Modifier.padding(top = 4.dp).fillMaxWidth(0.7f),
+            color = Color.White,
+            style = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.Center)
+        )
     }
 
 }
 
-fun DrawScope.drawHexagon() {
+fun DrawScope.drawHexagon(color: Color) {
     val path = Path()
     val centerX = size.width / 2
     val centerY = size.height / 2
@@ -87,7 +107,7 @@ fun DrawScope.drawHexagon() {
     ) {
         drawPath(
             path = path,
-            color = Color.Blue,
+            color = color,
             style = Stroke(width = 3.dp.toPx())
         )
     }
