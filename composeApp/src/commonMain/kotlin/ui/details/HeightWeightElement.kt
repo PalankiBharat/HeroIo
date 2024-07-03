@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
@@ -32,17 +33,15 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun HeightWeightStats(height: String, weight: String) {
     Row(
-        modifier = Modifier.fillMaxWidth().padding(20.dp)
-            .clip(shape = RoundedCornerShape(size = 10.dp)).background(
+        modifier = Modifier.fillMaxWidth().padding(14.dp)
+            .clip(shape = RoundedCornerShape(size = 14.dp)).background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
-                        Color.DarkGray.copy(alpha = 0.9f),
-                        Color.DarkGray.copy(alpha = 0.5f),
-                        Color.Black.copy(alpha = 0.5f),
-                        Color.Black.copy(alpha = 0.2f),
+                        Color(0xFF150f0f),
+                        Color.Transparent.copy(alpha = 0.2f),
                     )
                 )
-            ).padding(vertical = 20.dp).height(IntrinsicSize.Min),
+            ).padding(vertical = 16.dp).height(IntrinsicSize.Min),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Scale(
@@ -73,11 +72,16 @@ fun Scale(modifier: Modifier = Modifier, text: String, value: String, icon: Draw
                 painter = painterResource(resource = icon),
                 contentDescription = text,
                 modifier = Modifier.size(14.dp),
-                tint = Color.White.copy(alpha = 0.7f)
+                tint = Color(0xff797a7b)
             )
             Spacer(modifier = Modifier.width(6.dp))
-            Text(text = value, color = Color.White)
+            Text(text = value, color = Color.White, style = MaterialTheme.typography.bodyMedium)
         }
-        Text(text = text, modifier = Modifier.padding(top = 6.dp), color = Color.White)
+        Text(
+            text = text,
+            modifier = Modifier.padding(top = 6.dp),
+            color = Color.White,
+            style = MaterialTheme.typography.bodyLarge.copy(color = Color(0xff797a7b)),
+        )
     }
 }

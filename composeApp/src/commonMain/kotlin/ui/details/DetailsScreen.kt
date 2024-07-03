@@ -3,14 +3,13 @@ package ui.details
 import ScramblingText
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,12 +19,8 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ChatBubbleOutline
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -36,7 +31,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
@@ -73,8 +67,6 @@ import io.ktor.http.Url
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
-import ui.navigation.AppNavigation
-import ui.navigation.LocalNavigationProvider
 import ui.theme.blue
 import ui.theme.brighten
 import ui.theme.green
@@ -100,14 +92,11 @@ fun DetailsScreen(
         viewmodel.sendIntents(DetailsPageIntents.SetSelectedSuperhero(superheroId))
     }
     state.selectedSuperhero?.let {
-        Box(
-            modifier = Modifier.background(Color.Black).fillMaxSize().scrollable(
-                state = rememberScrollState(initial = 0),
-                orientation = Orientation.Vertical
-            )
+        Column(
+            modifier = Modifier.background(Color.Black).fillMaxSize().verticalScroll(state = rememberScrollState())
         ) {
             DetailsPager(
-                modifier = Modifier.fillMaxHeight(0.6f).align(Alignment.TopCenter),
+                modifier = Modifier.fillMaxWidth().aspectRatio(0.95f),
                 superheroList = state.superheroList ?: emptyList(),
                 selectedSuperhero = it
             ) {
@@ -115,9 +104,7 @@ fun DetailsScreen(
             }
             SuperheroDetails(
                 superhero = it,
-                modifier = Modifier.align(Alignment.BottomCenter).fillMaxHeight(0.45f).clip(
-                    RoundedCornerShape(20.dp)
-                )
+                modifier = Modifier.fillMaxHeight()
             )
         }
 
@@ -137,7 +124,6 @@ fun SuperheroDetails(modifier: Modifier = Modifier, superhero: Superhero) {
     Column(
         modifier = modifier.fillMaxSize()
             .background(Color.Black)
-            .scrollable(orientation = Orientation.Vertical, state = rememberScrollState())
     ) {
         superhero.apply {
             Text(
@@ -158,6 +144,8 @@ fun SuperheroDetails(modifier: Modifier = Modifier, superhero: Superhero) {
                 color = dominantColorState.color.brighten(0.2f)
             )
             Spacer(modifier = Modifier.height(10.dp))
+
+            HeightWeightStats(height = superhero.height?.lastOrNull()?:"", weight = superhero.weight?.lastOrNull()?:"")
 
             CharacterStatsColumn(
                 modifier = Modifier.fillMaxWidth(0.9f).align(Alignment.CenterHorizontally)
@@ -287,7 +275,6 @@ fun DetailsPager(
     selectedSuperhero: Superhero,
     onHeroChange: (Superhero) -> Unit
 ) {
-    val navController = LocalNavigationProvider.current
     val selectedIndex = superheroList.indexOfFirst { it == selectedSuperhero }
     val pagerState = rememberPagerState(initialPage = selectedIndex, pageCount = {
         superheroList.count()
@@ -301,10 +288,10 @@ fun DetailsPager(
         )
     }
 
-    Box {
+    Box(modifier = modifier) {
         HorizontalPager(
             state = pagerState,
-            modifier = modifier.drawWithContent {
+            modifier = Modifier.drawWithContent {
                 drawContent()
                 drawRect(
                     brush = Brush.verticalGradient(
@@ -360,14 +347,14 @@ fun DetailsPager(
         }
 
         ScramblingText(
-            modifier = Modifier.align(Alignment.BottomStart).padding(20.dp).padding(bottom = 30.dp),
+            modifier = Modifier.align(Alignment.BottomStart).padding(20.dp).padding(bottom = 10.dp),
             data = listOf(
                 selectedSuperhero.name,
                 selectedSuperhero.fullName ?: "",
             )
         )
 
-        FloatingActionButton(onClick = {
+/*        FloatingActionButton(onClick = {
             navController.navigate(
                 route = AppNavigation.Chat.createRouteWithArgs(
                     args = AppNavigation.Chat.ChatArguments(
@@ -379,7 +366,7 @@ fun DetailsPager(
             )
         }) {
             Icon(imageVector = Icons.Filled.ChatBubbleOutline, contentDescription = "")
-        }
+        }*/
     }
 
 }
