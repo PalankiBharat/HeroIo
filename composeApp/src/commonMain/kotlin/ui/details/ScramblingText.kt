@@ -17,7 +17,6 @@ import kotlin.random.Random
 fun ScramblingText(
     modifier: Modifier = Modifier,
     data: List<String>,
-    delayMillis: Long = 1000,
     pauseMillis: Long = 3000 // Pause after each word change
 ) {
     var displayedText by remember { mutableStateOf(data.first()) }
@@ -54,7 +53,7 @@ fun generateScrambledFrames(
     oldText: String,
     newText: String,
     chars: String,
-    totalFrames: Int = 15
+    totalFrames: Int = 15// can increase or decrease
 ): List<String> {
     val frames = mutableListOf<String>()
     val maxLength = max(oldText.length, newText.length)
