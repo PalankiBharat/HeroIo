@@ -20,7 +20,11 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Chat
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -67,6 +71,8 @@ import io.ktor.http.Url
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
+import ui.navigation.AppNavigation
+import ui.navigation.LocalNavigationProvider
 import ui.theme.blue
 import ui.theme.brighten
 import ui.theme.green
@@ -80,10 +86,10 @@ import kotlin.math.sqrt
 @OptIn(KoinExperimentalAPI::class)
 @Composable
 fun DetailsScreen(
-    modifier: Modifier = Modifier,
     viewmodel: SuperheroDetailsViewmodel = koinViewModel(),
     superheroId: String
 ) {
+    val navController = LocalNavigationProvider.current
     val state = viewmodel.states.collectAsState().value
     val events by viewmodel.events.collectAsState(SuperheroDetailsEvents.None)
     LaunchedEffect(
@@ -91,22 +97,40 @@ fun DetailsScreen(
     ) {
         viewmodel.sendIntents(DetailsPageIntents.SetSelectedSuperhero(superheroId))
     }
-    state.selectedSuperhero?.let {
-        Column(
-            modifier = Modifier.background(Color.Black).fillMaxSize().verticalScroll(state = rememberScrollState())
-        ) {
-            DetailsPager(
-                modifier = Modifier.fillMaxWidth().aspectRatio(0.95f),
-                superheroList = state.superheroList ?: emptyList(),
-                selectedSuperhero = it
+
+    Box() {
+
+        state.selectedSuperhero?.let {
+            Column(
+                modifier = Modifier.background(Color.Black).fillMaxSize()
+                    .verticalScroll(state = rememberScrollState())
             ) {
-                viewmodel.sendIntents(DetailsPageIntents.SetSelectedSuperhero(it.id))
+                DetailsPager(
+                    modifier = Modifier.fillMaxWidth().aspectRatio(0.95f),
+                    superheroList = state.superheroList ?: emptyList(),
+                    selectedSuperhero = it
+                ) {
+                    viewmodel.sendIntents(DetailsPageIntents.SetSelectedSuperhero(it.id))
+                }
+                SuperheroDetails(
+                    superhero = it,
+                    modifier = Modifier.fillMaxHeight()
+                )
             }
-            SuperheroDetails(
-                superhero = it,
-                modifier = Modifier.fillMaxHeight()
-            )
+
+            FloatingActionButton(modifier = Modifier.align(Alignment.BottomEnd), onClick = {
+                navController.navigate(
+                    AppNavigation.Chat.createRouteWithArgs(
+                    AppNavigation.Chat.ChatArguments(
+                        id = it.id, name = it.name, img = "brute"
+                    )
+                ))
+            }) {
+                Icon(imageVector = Icons.AutoMirrored.Filled.Chat, contentDescription = "")
+            }
+
         }
+
 
     }
 }
@@ -145,7 +169,10 @@ fun SuperheroDetails(modifier: Modifier = Modifier, superhero: Superhero) {
             )
             Spacer(modifier = Modifier.height(10.dp))
 
-            HeightWeightStats(height = superhero.height?.lastOrNull()?:"", weight = superhero.weight?.lastOrNull()?:"")
+            HeightWeightStats(
+                height = superhero.height?.lastOrNull() ?: "",
+                weight = superhero.weight?.lastOrNull() ?: ""
+            )
 
             CharacterStatsColumn(
                 modifier = Modifier.fillMaxWidth(0.9f).align(Alignment.CenterHorizontally)
@@ -354,19 +381,19 @@ fun DetailsPager(
             )
         )
 
-/*        FloatingActionButton(onClick = {
-            navController.navigate(
-                route = AppNavigation.Chat.createRouteWithArgs(
-                    args = AppNavigation.Chat.ChatArguments(
-                        id = selectedSuperhero.id,
-                        name = selectedSuperhero.name,
-                        img = selectedSuperhero.imagesEntity?.midImage ?: ""
+        /*        FloatingActionButton(onClick = {
+                    navController.navigate(
+                        route = AppNavigation.Chat.createRouteWithArgs(
+                            args = AppNavigation.Chat.ChatArguments(
+                                id = selectedSuperhero.id,
+                                name = selectedSuperhero.name,
+                                img = selectedSuperhero.imagesEntity?.midImage ?: ""
+                            )
+                        )
                     )
-                )
-            )
-        }) {
-            Icon(imageVector = Icons.Filled.ChatBubbleOutline, contentDescription = "")
-        }*/
+                }) {
+                    Icon(imageVector = Icons.Filled.ChatBubbleOutline, contentDescription = "")
+                }*/
     }
 
 }

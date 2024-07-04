@@ -46,10 +46,10 @@ fun ChatScreen(
         items(items = chatList) {
             when (it.role) {
                 ASSISTANT -> {
-                    HeroChatBubble(text = it.message)
+                    HeroChatResponse(text = it.message)
                 }
                 USER -> {
-                    UserChatBubble(text = it.message)
+                    UserChatResponse(text = it.message)
                 }
             }
         }
