@@ -1,5 +1,8 @@
 package ui.home
 
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -43,8 +46,14 @@ import ui.utils.Constants.CARD_GLOW_PATH
 import ui.utils.Constants.CARD_SHAPE_PATH
 
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun SuperheroCardNew(modifier: Modifier = Modifier, superhero: Superhero) {
+fun SharedTransitionScope.SuperheroCardNew(
+    modifier: Modifier = Modifier,
+    superhero: Superhero,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedContentScope: AnimatedContentScope
+) {
     val painter = painterResource(resource = Res.drawable.hero_bard_bg)
     val imageUrl = superhero.imagesEntity?.smallImage
     val networkLoader = rememberNetworkLoader()
@@ -69,7 +78,11 @@ fun SuperheroCardNew(modifier: Modifier = Modifier, superhero: Superhero) {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         AsyncImage(
-            modifier = Modifier
+            modifier = Modifier.Companion
+                .sharedElement(
+                    sharedTransitionScope.rememberSharedContentState(key = "HeroImage-${superhero.id}"),
+                    animatedVisibilityScope = animatedContentScope
+                )
                 .padding(start = 32.dp)
                 .align(Alignment.CenterVertically)
                 .drawWithContent {
@@ -84,12 +97,7 @@ fun SuperheroCardNew(modifier: Modifier = Modifier, superhero: Superhero) {
                                 .copy(alpha = (1f - percent) / 25f), // Semi-transparent color for glow
                             style = Stroke(width = 9.dp.toPx() * (percent)),
                         )
-
-                        println(percent)
-                        println("Stroke" + 15 * (percent) + "Alpha" + (1f - percent))
-
                     }
-
                     drawPath(
                         path = path,
                         color = Color.White,
@@ -111,6 +119,11 @@ fun SuperheroCardNew(modifier: Modifier = Modifier, superhero: Superhero) {
             verticalArrangement = Arrangement.Center
         ) {
             Text(
+                modifier = Modifier.Companion
+                    .sharedElement(
+                        sharedTransitionScope.rememberSharedContentState(key = "Text-${superhero.name}"),
+                        animatedVisibilityScope = animatedContentScope
+                    ),
                 text = superhero.name,
                 style = MaterialTheme.typography.titleMedium,
                 color = Color.White

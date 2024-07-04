@@ -1,6 +1,9 @@
 package ui.details
 
 import ScramblingText
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -24,7 +27,7 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Chat
+import androidx.compose.material.icons.filled.ChatBubbleOutline
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -83,13 +86,15 @@ import ui.theme.yellow
 import kotlin.math.absoluteValue
 import kotlin.math.sqrt
 
-@OptIn(KoinExperimentalAPI::class)
+@OptIn(KoinExperimentalAPI::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun DetailsScreen(
+    modifier: Modifier = Modifier,
     viewmodel: SuperheroDetailsViewmodel = koinViewModel(),
-    superheroId: String
+    superheroId: String,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedContentScope: AnimatedContentScope
 ) {
-    val navController = LocalNavigationProvider.current
     val state = viewmodel.states.collectAsState().value
     val events by viewmodel.events.collectAsState(SuperheroDetailsEvents.None)
     LaunchedEffect(
@@ -97,18 +102,18 @@ fun DetailsScreen(
     ) {
         viewmodel.sendIntents(DetailsPageIntents.SetSelectedSuperhero(superheroId))
     }
-
-    Box() {
-
-        state.selectedSuperhero?.let {
-            Column(
-                modifier = Modifier.background(Color.Black).fillMaxSize()
-                    .verticalScroll(state = rememberScrollState())
-            ) {
+    state.selectedSuperhero?.let {
+        Column(
+            modifier = Modifier.background(Color.Black).fillMaxSize()
+                .verticalScroll(state = rememberScrollState())
+        ) {
+            with(sharedTransitionScope) {
                 DetailsPager(
                     modifier = Modifier.fillMaxWidth().aspectRatio(0.95f),
                     superheroList = state.superheroList ?: emptyList(),
-                    selectedSuperhero = it
+                    selectedSuperhero = it,
+                    sharedTransitionScope = sharedTransitionScope,
+                    animatedContentScope = animatedContentScope
                 ) {
                     viewmodel.sendIntents(DetailsPageIntents.SetSelectedSuperhero(it.id))
                 }
@@ -117,18 +122,6 @@ fun DetailsScreen(
                     modifier = Modifier.fillMaxHeight()
                 )
             }
-
-            FloatingActionButton(modifier = Modifier.align(Alignment.BottomEnd), onClick = {
-                navController.navigate(
-                    AppNavigation.Chat.createRouteWithArgs(
-                    AppNavigation.Chat.ChatArguments(
-                        id = it.id, name = it.name, img = "brute"
-                    )
-                ))
-            }) {
-                Icon(imageVector = Icons.AutoMirrored.Filled.Chat, contentDescription = "")
-            }
-
         }
 
 
@@ -294,13 +287,15 @@ fun CharacterStatsColumn(modifier: Modifier = Modifier, powerStats: PowerStats) 
 fun Int?.toSafePercentage(): Float = this?.toFloat()?.coerceAtMost(100f)?.div(100f) ?: 0f
 
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun DetailsPager(
+fun SharedTransitionScope.DetailsPager(
     modifier: Modifier = Modifier,
     superheroList: List<Superhero>,
     selectedSuperhero: Superhero,
-    onHeroChange: (Superhero) -> Unit
+    sharedTransitionScope: SharedTransitionScope,
+    animatedContentScope: AnimatedContentScope,
+    onHeroChange: (Superhero) -> Unit,
 ) {
     val selectedIndex = superheroList.indexOfFirst { it == selectedSuperhero }
     val pagerState = rememberPagerState(initialPage = selectedIndex, pageCount = {
@@ -344,7 +339,11 @@ fun DetailsPager(
                         model = image,
                         contentDescription = image,
                         contentScale = ContentScale.Crop,
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.Companion
+                            .sharedElement(
+                                sharedTransitionScope.rememberSharedContentState(key = "HeroImage-${superheroList[page].id}"),
+                                animatedVisibilityScope = animatedContentScope
+                            ).fillMaxSize()
                             .graphicsLayer {
                                 val pageOffset = pagerState.offsetForPage(page)
                                 translationX = size.width * pageOffset
@@ -374,26 +373,29 @@ fun DetailsPager(
         }
 
         ScramblingText(
-            modifier = Modifier.align(Alignment.BottomStart).padding(20.dp).padding(bottom = 10.dp),
+            modifier = Modifier.Companion
+                .sharedElement(
+                    sharedTransitionScope.rememberSharedContentState(key = "Text-${selectedSuperhero.name}"),
+                    animatedVisibilityScope = animatedContentScope
+                ).align(Alignment.BottomStart).padding(20.dp).padding(bottom = 10.dp),
             data = listOf(
                 selectedSuperhero.name,
                 selectedSuperhero.fullName ?: "",
             )
         )
 
-        /*        FloatingActionButton(onClick = {
-                    navController.navigate(
-                        route = AppNavigation.Chat.createRouteWithArgs(
-                            args = AppNavigation.Chat.ChatArguments(
-                                id = selectedSuperhero.id,
-                                name = selectedSuperhero.name,
-                                img = selectedSuperhero.imagesEntity?.midImage ?: ""
-                            )
-                        )
-                    )
-                }) {
-                    Icon(imageVector = Icons.Filled.ChatBubbleOutline, contentDescription = "")
-                }*/
+        val navController = LocalNavigationProvider.current
+        FloatingActionButton(onClick = {
+            navController.navigate(
+                AppNavigation.Chat(
+                    id = selectedSuperhero.id,
+                    name = selectedSuperhero.name,
+                    img = selectedSuperhero.imagesEntity?.midImage ?: ""
+                )
+            )
+        }) {
+            Icon(imageVector = Icons.Filled.ChatBubbleOutline, contentDescription = "")
+        }
     }
 
 }

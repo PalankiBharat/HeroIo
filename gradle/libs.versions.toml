@@ -7,14 +7,15 @@ jvm = "11"
 ksp = "2.0.0-1.0.21"
 androidx-activityCompose = "1.9.0"
 compose = "1.6.8"
-compose-multiplatform = "1.6.11"
+compose-multiplatform = "1.7.0-alpha01"
 junit = "4.13.2"
 kotlin = "2.0.0"
-kotlinxCoroutinesCore = "1.8.0"
+kotlinSerialization = "1.6.3"
+kotlinxCoroutinesCore = "1.8.1"
 ktor = "2.3.10"
-androidxLifecycle = "2.8.2"
+androidxLifecycle = "2.8.3"
 androidxRoom = "2.7.0-alpha04"
-navigationCompose = "2.7.0-alpha07"
+navigationCompose = "2.8.0-alpha08"
 sqlite = "2.5.0-SNAPSHOT"
 coil = "3.0.0-alpha05"
 koin = "3.6.0-alpha3"
@@ -36,6 +37,8 @@ compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview"
 
 
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
+kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinSerialization" }
+
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }

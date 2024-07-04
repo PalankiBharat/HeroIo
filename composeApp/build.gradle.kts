@@ -64,6 +64,9 @@ kotlin {
             //Kotlin Coroutines
             implementation(libs.kotlinx.coroutines.core)
 
+            // Kotlin Serialization
+            implementation(libs.kotlinx.serialization)
+
             //Koin
             implementation(libs.koin.core)
             implementation(libs.koin.compose)

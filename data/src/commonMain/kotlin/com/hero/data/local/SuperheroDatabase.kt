@@ -7,7 +7,7 @@ import com.hero.data.model.SuperheroChatEntity
 import com.hero.data.model.SuperheroEntity
 
 @Database(entities = [SuperheroEntity::class, SuperheroChatEntity::class], version = 1)
-@TypeConverters(StringListConverter::class,PowerStatsConverter::class,ImagesConverter::class)
+@TypeConverters(StringListConverter::class, PowerStatsConverter::class, ImagesConverter::class)
 abstract class SuperheroDatabase : RoomDatabase(), DB {
     abstract fun superheroDao(): SuperheroDao
     abstract fun superheroChatDao(): SuperheroChatDao
