@@ -122,6 +122,7 @@ android {
     }
     dependencies {
         debugImplementation(libs.compose.ui.tooling)
+        implementation(libs.core.splashscreen)
     }
 }
 

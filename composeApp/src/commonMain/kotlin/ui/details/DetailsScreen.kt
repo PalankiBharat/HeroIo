@@ -18,17 +18,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
 import androidx.compose.material.icons.filled.ChatBubbleOutline
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -89,7 +91,6 @@ import kotlin.math.sqrt
 @OptIn(KoinExperimentalAPI::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun DetailsScreen(
-    modifier: Modifier = Modifier,
     viewmodel: SuperheroDetailsViewmodel = koinViewModel(),
     superheroId: String,
     sharedTransitionScope: SharedTransitionScope,
@@ -297,6 +298,7 @@ fun SharedTransitionScope.DetailsPager(
     animatedContentScope: AnimatedContentScope,
     onHeroChange: (Superhero) -> Unit,
 ) {
+    val navController = LocalNavigationProvider.current
     val selectedIndex = superheroList.indexOfFirst { it == selectedSuperhero }
     val pagerState = rememberPagerState(initialPage = selectedIndex, pageCount = {
         superheroList.count()
@@ -313,15 +315,7 @@ fun SharedTransitionScope.DetailsPager(
     Box(modifier = modifier) {
         HorizontalPager(
             state = pagerState,
-            modifier = Modifier.drawWithContent {
-                drawContent()
-                drawRect(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(Color.Transparent, Color.Black),
-                    ),
-                    size = size
-                )
-            }.pointerInput(Unit) {
+            modifier = Modifier.pointerInput(Unit) {
                 detectTapGestures(
                     onPress = { offset ->
                         offsetY = offset.y
@@ -343,7 +337,27 @@ fun SharedTransitionScope.DetailsPager(
                             .sharedElement(
                                 sharedTransitionScope.rememberSharedContentState(key = "HeroImage-${superheroList[page].id}"),
                                 animatedVisibilityScope = animatedContentScope
-                            ).fillMaxSize()
+                            )
+                            .drawWithContent {
+                                drawContent()
+                                drawRect(
+                                    brush = Brush.verticalGradient(
+                                        colors = listOf(Color.Transparent, Color.Black),
+                                    ),
+                                    size = size
+                                )
+                                drawRect(
+                                    brush = Brush.verticalGradient(
+                                        colors = listOf(
+                                            Color.Black,
+                                            Color.Transparent,
+                                            Color.Transparent
+                                        ),
+                                    ),
+                                    size = size
+                                )
+                            }
+                            .fillMaxSize()
                             .graphicsLayer {
                                 val pageOffset = pagerState.offsetForPage(page)
                                 translationX = size.width * pageOffset
@@ -384,18 +398,36 @@ fun SharedTransitionScope.DetailsPager(
             )
         )
 
-        val navController = LocalNavigationProvider.current
-        FloatingActionButton(onClick = {
-            navController.navigate(
-                AppNavigation.Chat(
-                    id = selectedSuperhero.id,
-                    name = selectedSuperhero.name,
-                    img = selectedSuperhero.imagesEntity?.midImage ?: ""
+        Row(modifier = modifier.fillMaxWidth(0.5f).statusBarsPadding().padding(top = 10.dp)) {
+            IconButton(
+                onClick = {
+                    navController.popBackStack()
+                },
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBackIos,
+                    contentDescription = "Back",
+                    tint = Color.White
                 )
-            )
-        }) {
-            Icon(imageVector = Icons.Filled.ChatBubbleOutline, contentDescription = "")
+            }
+            Spacer(Modifier.weight(1f))
+            IconButton(onClick = {
+                navController.navigate(
+                    AppNavigation.Chat(
+                        id = selectedSuperhero.id,
+                        name = selectedSuperhero.name,
+                        img = selectedSuperhero.imagesEntity?.midImage ?: ""
+                    )
+                )
+            }) {
+                Icon(
+                    imageVector = Icons.Filled.ChatBubbleOutline,
+                    contentDescription = "",
+                    tint = Color.White
+                )
+            }
         }
+
     }
 
 }
