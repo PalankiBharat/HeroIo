@@ -39,17 +39,20 @@ import heroio.composeapp.generated.resources.weight_scale
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun HeroChatResponse(modifier: Modifier = Modifier, text: String) {
+fun HeroChatResponse(modifier: Modifier = Modifier, text: String, isNewMessage: Boolean = false) {
     var enabled by remember { mutableStateOf(false) }
     val animatable by animateFloatAsState(
         targetValue = if (enabled) 1f else 0f, label = "",
-        animationSpec = tween(durationMillis = 500, delayMillis = 600)
+        animationSpec = tween(
+            durationMillis = if (isNewMessage) 500 else 0,
+            delayMillis = if (isNewMessage) 350 else 0
+        )
     )
     val scale by animateFloatAsState(
         targetValue = if (enabled) 1f else 0f, label = "",
-        animationSpec = tween(durationMillis = 350, delayMillis = 300)
+        animationSpec = tween(durationMillis = if (isNewMessage) 350 else 0)
     )
-    LaunchedEffect(key1 = Unit) {
+    LaunchedEffect(key1 = text) {
         enabled = true
     }
     Box(modifier = modifier
@@ -135,7 +138,7 @@ fun UserChatResponse(modifier: Modifier = Modifier, text: String) {
         targetValue = if (enabled) 1f else 0f, label = "",
         animationSpec = tween(durationMillis = 500, delayMillis = 600)
     )
-    LaunchedEffect(key1 = Unit) {
+    LaunchedEffect(key1 = text) {
         enabled = true
     }
     val scale by animateFloatAsState(

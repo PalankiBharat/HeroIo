@@ -19,33 +19,33 @@ class ChatRepoImpl(
         dao.getAllChatsBySuperhero(superheroId)
 
     override suspend fun sendChatToServer(message: Message, superheroID: String) {
+        println("Chat Old Message" + "oldMessage")
         val oldMessage = dao.getChatsBySuperhero(superheroID).map {
             Message(
                 role = it.role,
                 content = it.message
             )
         }
-        println("Old MEssage" + oldMessage)
+        println("Chat Old Message" + oldMessage)
         dao.addChat(message.toChatEntity(superheroID))
         val newList = oldMessage.toMutableList()
         newList.add(message)
-        println("new List" + newList)
+        println("Chat New List" + newList)
         val response = apiService.sendSuperheroChat(
             SuperheroChatRequest(
                 messageList = newList,
                 modelName = GROQ_LLM_MODEL
             )
         )
-        println("responce" + response)
+        println("Chat Response" + response)
         val msg = response.choices?.lastOrNull()?.toChatEntity(superheroID)
 
         if (msg != null) {
             try {
+                println("Chat Message" + msg)
                 dao.addChat(msg)
-                println("MEssage" + msg)
-
             } catch (e: Exception) {
-                println("MEssage EXP" + e.message)
+                println("Chat Message Exp" + e.message)
 
             }
         }
