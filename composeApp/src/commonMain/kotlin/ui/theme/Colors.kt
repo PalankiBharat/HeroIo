@@ -65,7 +65,7 @@ fun Color.fromHSL(hsl: FloatArray): Color {
     return Color(r, g, b, alpha)
 }
 
-fun Color.brighten(factor: Float): Color {
+fun Color.brighten(factor: Float = 0.2f): Color {
     val hsl = this.toHSL()
     // Increase lightness
     hsl[2] = (hsl[2] + factor).coerceIn(0f, 1f)

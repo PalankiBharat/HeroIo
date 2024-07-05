@@ -37,9 +37,10 @@ import androidx.compose.ui.unit.dp
 import heroio.composeapp.generated.resources.Res
 import heroio.composeapp.generated.resources.weight_scale
 import org.jetbrains.compose.resources.painterResource
+import ui.theme.themeColor
 
 @Composable
-fun HeroChatResponse(modifier: Modifier = Modifier, text: String, isNewMessage: Boolean = false) {
+fun HeroChatResponse(modifier: Modifier = Modifier, text: String, isNewMessage: Boolean = false,dominantColor:Color) {
     var enabled by remember { mutableStateOf(false) }
     val animatable by animateFloatAsState(
         targetValue = if (enabled) 1f else 0f, label = "",
@@ -71,7 +72,7 @@ fun HeroChatResponse(modifier: Modifier = Modifier, text: String, isNewMessage: 
                     style = Fill
                 )
                 drawRoundRect(
-                    color = Color.White,
+                    color = dominantColor,
                     cornerRadius = CornerRadius(cornerRadius, cornerRadius),
                     style = Stroke(width = 1.dp.toPx())
                 )
@@ -132,19 +133,23 @@ fun HeroChatResponse(modifier: Modifier = Modifier, text: String, isNewMessage: 
 }
 
 @Composable
-fun UserChatResponse(modifier: Modifier = Modifier, text: String) {
+fun UserChatResponse(modifier: Modifier = Modifier, text: String, isNewMessage: Boolean) {
     var enabled by remember { mutableStateOf(false) }
     val animatable by animateFloatAsState(
         targetValue = if (enabled) 1f else 0f, label = "",
-        animationSpec = tween(durationMillis = 500, delayMillis = 600)
+        animationSpec = tween(
+            durationMillis = if (isNewMessage) 500 else 0,
+            delayMillis = if (isNewMessage) 350 else 0
+        )
+    )
+    val scale by animateFloatAsState(
+        targetValue = if (enabled) 1f else 0f, label = "",
+        animationSpec = tween(durationMillis = if (isNewMessage) 350 else 0)
     )
     LaunchedEffect(key1 = text) {
         enabled = true
     }
-    val scale by animateFloatAsState(
-        targetValue = if (enabled) 1f else 0f, label = "",
-        animationSpec = tween(durationMillis = 350, delayMillis = 300)
-    )
+
     Box(modifier = modifier
         .fillMaxWidth()
         .padding(10.dp)
@@ -161,7 +166,7 @@ fun UserChatResponse(modifier: Modifier = Modifier, text: String) {
                     style = Fill
                 )
                 drawRoundRect(
-                    color = Color.White,
+                    color = themeColor,
                     cornerRadius = CornerRadius(cornerRadius, cornerRadius),
                     style = Stroke(width = 1.dp.toPx())
                 )
