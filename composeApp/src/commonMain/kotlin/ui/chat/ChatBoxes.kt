@@ -43,16 +43,16 @@ fun HeroChatResponse(modifier: Modifier = Modifier, text: String) {
     var enabled by remember { mutableStateOf(false) }
     val animatable by animateFloatAsState(
         targetValue = if (enabled) 1f else 0f, label = "",
-        animationSpec = tween(durationMillis = 500)
+        animationSpec = tween(durationMillis = 500, delayMillis = 600)
     )
     val scale by animateFloatAsState(
         targetValue = if (enabled) 1f else 0f, label = "",
-        animationSpec = tween(durationMillis = 350)
+        animationSpec = tween(durationMillis = 350, delayMillis = 300)
     )
     LaunchedEffect(key1 = Unit) {
         enabled = true
     }
-    Box(modifier = Modifier
+    Box(modifier = modifier
         .fillMaxWidth()
         .padding(10.dp)
         .graphicsLayer(
@@ -133,16 +133,16 @@ fun UserChatResponse(modifier: Modifier = Modifier, text: String) {
     var enabled by remember { mutableStateOf(false) }
     val animatable by animateFloatAsState(
         targetValue = if (enabled) 1f else 0f, label = "",
-        animationSpec = tween(durationMillis = 500)
+        animationSpec = tween(durationMillis = 500, delayMillis = 600)
     )
     LaunchedEffect(key1 = Unit) {
         enabled = true
     }
     val scale by animateFloatAsState(
         targetValue = if (enabled) 1f else 0f, label = "",
-        animationSpec = tween(durationMillis = 350)
+        animationSpec = tween(durationMillis = 350, delayMillis = 300)
     )
-    Box(modifier = Modifier
+    Box(modifier = modifier
         .fillMaxWidth()
         .padding(10.dp)
         .graphicsLayer(

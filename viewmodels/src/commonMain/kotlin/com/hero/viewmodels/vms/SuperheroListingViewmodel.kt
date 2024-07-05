@@ -53,7 +53,7 @@ open class SuperheroListingViewmodel(
                         println("Max Power " + result.maxOfOrNull {
                             it.powerStats?.combat ?: 0
                         })
-                        state.copy(superheroList = result.shuffled())
+                        state.copy(superheroList = result)
                     }
                 }
             }

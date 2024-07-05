@@ -7,7 +7,6 @@ import com.hero.data.model.SuperheroChatRequest
 import com.hero.data.remote.api.SuperheroChatApiService
 import com.hero.data.utils.ApiConstants.GROQ_LLM_MODEL
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.lastOrNull
 import org.koin.core.annotation.Single
 import toChatEntity
 
@@ -20,24 +19,35 @@ class ChatRepoImpl(
         dao.getAllChatsBySuperhero(superheroId)
 
     override suspend fun sendChatToServer(message: Message, superheroID: String) {
-        val oldMessage = getSuperheroChat(superheroID).lastOrNull()?.map {
+        val oldMessage = dao.getChatsBySuperhero(superheroID).map {
             Message(
                 role = it.role,
                 content = it.message
             )
         }
+        println("Old MEssage" + oldMessage)
         dao.addChat(message.toChatEntity(superheroID))
-        val newList = oldMessage?.toMutableList()
-        newList?.add(message)
+        val newList = oldMessage.toMutableList()
+        newList.add(message)
+        println("new List" + newList)
         val response = apiService.sendSuperheroChat(
             SuperheroChatRequest(
                 messageList = newList,
                 modelName = GROQ_LLM_MODEL
             )
         )
+        println("responce" + response)
         val msg = response.choices?.lastOrNull()?.toChatEntity(superheroID)
+
         if (msg != null) {
-            dao.addChat(msg)
+            try {
+                dao.addChat(msg)
+                println("MEssage" + msg)
+
+            } catch (e: Exception) {
+                println("MEssage EXP" + e.message)
+
+            }
         }
     }
 }

@@ -18,25 +18,16 @@ class SuperheroChat : SuperheroChatApiService {
     private val httpClient = HttpClient.httpClient
 
     override suspend fun sendSuperheroChat(superheroChatRequest: SuperheroChatRequest): SuperheroChatResponse {
-        val result = try {
-            httpClient.post {
+        val result = httpClient.post {
                 url(CHAT_BASE_URL)
                 contentType(ContentType.Application.Json)
                 header("Authorization", "Bearer $GROQ_API_KEY")
                 setBody(superheroChatRequest)
             }
-        } catch (e: Exception) {
-            throw CustomException(CustomError.SERVICE_UNAVAILABLE)
-        }
-        when (result.status.value) {
-            in 200..299 -> Unit
-            500 -> throw CustomException(CustomError.SERVER_ERROR)
-            in 400..499 -> throw CustomException(CustomError.CLIENT_ERROR)
-            else -> throw CustomException(CustomError.UNKNOWN_ERROR)
-        }
         return try {
             result.body()
         } catch (e: Exception) {
+            println(e.message)
             throw CustomException(CustomError.SERVER_ERROR)
         }
     }
