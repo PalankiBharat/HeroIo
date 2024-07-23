@@ -1,14 +1,51 @@
-This is a Kotlin Multiplatform project targeting Android, iOS.
+# HeroIO
 
-* `/composeApp` is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - `commonMain` is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    `iosMain` would be the right folder for such calls.
+## Overview
 
-* `/iosApp` contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform, 
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+The Superhero KMP (Kotlin Multiplatform) app is a cross-platform application built using modern technologies and libraries. The app allows users to explore various superheroes, view detailed information, and chat with them using an AI-powered chat feature. The app boasts a cool retro look, enhancing the user experience.
+
+## Features
+
+- **Superhero Information:** Explore a wide range of superheroes and view detailed information about each one.
+- **AI Chat:** Interact with superheroes through an AI-powered chat feature.
+- **Retro Design:** Enjoy a visually appealing retro-themed user interface.
+- **Compose Multiplatform:** Leverage Jetpack Compose for a modern and declarative UI across Android and other platforms.
+- **Ktor Client:** Utilize Ktor for efficient and scalable network communication.
+- **Room Database:** Store and manage data locally with Room.
+- **Android ViewModel:** Manage UI-related data lifecycle-aware using Android ViewModel.
+- **Multi-modular Architecture:** Follow a multi-modular architecture approach for better code organization and scalability.
+- **Compose Navigation:** Use Compose Navigation with type-safe arguments and shared element transitions.
 
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+## Getting Started
+
+## Setting Up Your Own GROQ API Key for AI Chat
+This app uses the GROQ API for its AI chat feature. Follow these steps to set up your own API key:
+
+- Go to the [**GROQ API Console**](https://console.groq.com/keys) and sign up for an account.
+- Obtain your API key from the console.
+- Open the local.properties file in the project root directory.
+- Add the following line to the file, replacing **YOUR_API_KEY** with your actual API key:
+
+
+
+## Technologies Used
+
+- **Kotlin Multiplatform**
+- **Jetpack Compose**
+- **Ktor**
+- **Room**
+- **Android ViewModel**
+- **Multi-modular Architecture**
+- **Compose Navigation**
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgements
+
+- [Superhero API](https://superheroapi.com)
+- [Jetpack Compose](https://developer.android.com/jetpack/compose)
+- [Ktor](https://ktor.io)
+- [Room](https://developer.android.com/training/data-storage/room)
