@@ -18,18 +18,6 @@ The Superhero KMP (Kotlin Multiplatform) app is a cross-platform application bui
 - **Multi-modular Architecture:** Follow a multi-modular architecture approach for better code organization and scalability.
 - **Compose Navigation:** Use Compose Navigation with type-safe arguments and shared element transitions.
 
-
-## Getting Started
-
-## Setting Up Your Own GROQ API Key for AI Chat
-This app uses the GROQ API for its AI chat feature. Follow these steps to set up your own API key:
-
-- Go to the [**GROQ API Console**](https://console.groq.com/keys) and sign up for an account.
-- Obtain your API key from the console.
-- Open the data/utils/ApiConstants file in the project directory.
-- Add the following line to the file, replacing **YOUR_API_KEY** with your actual API key:
-
-
 ## Technologies Used
 
 - 🌐 **[Kotlin Multiplatform](https://www.jetbrains.com/kotlin-multiplatform/)**
@@ -39,6 +27,14 @@ This app uses the GROQ API for its AI chat feature. Follow these steps to set up
 - 📊 **[Android ViewModel](https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-viewmodel.html)**
 - 🏗️ **[Multi-modular Architecture](https://developer.android.com/studio/build/multi-module)**
 - 🧭 **[Compose Navigation](https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-navigation-routing.html)**
+
+## Setting Up Your Own GROQ API Key for AI Chat
+This app uses the GROQ API for its AI chat feature. Follow these steps to set up your own API key:
+
+- Go to the [**GROQ API Console**](https://console.groq.com/keys) and sign up for an account.
+- Obtain your API key from the console.
+- Open the data/utils/ApiConstants file in the project directory.
+- Add the following line to the file, replacing **YOUR_API_KEY** with your actual API key:
 
 ## Screenshots 
 ![Banner](https://github.com/PalankiBharat/HeroIo/blob/master/screenshots/Collage.png)
