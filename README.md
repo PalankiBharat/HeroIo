@@ -1,3 +1,8 @@
+<div align="center">
+</br>
+<img src="https://github.com/PalankiBharat/HeroIo/blob/master/composeApp/src/androidMain/ic_launcher_hero-playstore.png" width="200" height="200" />
+</div>
+
 # HeroIO
 
 ## Overview
