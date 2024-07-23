@@ -51,7 +51,8 @@ fun CharacteristicLabel(
     value: String,
     image: Painter,
     color: Color = themeColor,
-    width: Dp = 3.dp
+    width: Dp = 3.dp,
+    isTextVisible: Boolean = true
 ) {
     Column(
         verticalArrangement = Arrangement.Center,
@@ -76,13 +77,16 @@ fun CharacteristicLabel(
                     .align(Alignment.Center)
             )
         }
-        Text(
-            text = value.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() },
-            modifier = Modifier.padding(top = 4.dp).fillMaxWidth(0.7f),
-            color = Color.White,
-            style = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.Center),
-            maxLines = 1
-        )
+
+        if (isTextVisible){
+            Text(
+                text = value.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() },
+                modifier = Modifier.padding(top = 4.dp).fillMaxWidth(0.7f),
+                color = Color.White,
+                style = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.Center),
+                maxLines = 1
+            )
+        }
     }
 
 }

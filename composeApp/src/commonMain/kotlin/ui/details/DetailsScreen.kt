@@ -324,21 +324,7 @@ fun SharedTransitionScope.DetailsPager(
                         modifier = Modifier.Companion.sharedElement(
                             sharedTransitionScope.rememberSharedContentState(key = "HeroImage-${superheroList[page].id}"),
                             animatedVisibilityScope = animatedContentScope
-                        ).drawWithContent {
-                            drawContent()
-                            drawRect(
-                                brush = Brush.verticalGradient(
-                                    colors = listOf(Color.Transparent, Color.Black),
-                                ), size = size
-                            )
-                            drawRect(
-                                brush = Brush.verticalGradient(
-                                    colors = listOf(
-                                        Color.Black, Color.Transparent, Color.Transparent
-                                    ),
-                                ), size = size
-                            )
-                        }.fillMaxSize().graphicsLayer {
+                        ).fillMaxSize().graphicsLayer {
                             val pageOffset = pagerState.offsetForPage(page)
                             translationX = size.width * pageOffset
 
@@ -363,6 +349,21 @@ fun SharedTransitionScope.DetailsPager(
                 }
             }
         }
+        Box(modifier = Modifier.fillMaxSize().drawWithContent {
+            drawContent()
+            drawRect(
+                brush = Brush.verticalGradient(
+                    colors = listOf(Color.Transparent, Color.Black),
+                ), size = size
+            )
+            drawRect(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        Color.Black, Color.Transparent, Color.Transparent
+                    ),
+                ), size = size
+            )
+        })
 
         ScramblingText(
             modifier = Modifier.Companion.sharedElement(
@@ -378,7 +379,9 @@ fun SharedTransitionScope.DetailsPager(
         Row(
             modifier = Modifier.fillMaxWidth(0.9f).statusBarsPadding().padding(top = 10.dp).align(
                 Alignment.TopCenter
-            ), verticalAlignment = Alignment.CenterVertically
+            ),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceAround
         ) {
             IconButton(
                 onClick = {
@@ -386,6 +389,7 @@ fun SharedTransitionScope.DetailsPager(
                 },
             ) {
                 Icon(
+                    modifier = Modifier.fillMaxSize().align(Alignment.CenterVertically),
                     imageVector = Icons.AutoMirrored.Filled.ArrowBackIos,
                     contentDescription = "Back",
                     tint = Color.White
@@ -402,7 +406,8 @@ fun SharedTransitionScope.DetailsPager(
                         )
                     )
                 }, image = painterResource(Res.drawable.ic_chat), value = "",
-                width = 1.dp
+                width = 1.dp,
+                isTextVisible = false
             )
         }
 
@@ -412,17 +417,14 @@ fun SharedTransitionScope.DetailsPager(
 
 
 // ACTUAL OFFSET
-@OptIn(ExperimentalFoundationApi::class)
 fun PagerState.offsetForPage(page: Int) = (currentPage - page) + currentPageOffsetFraction
 
 // OFFSET ONLY FROM THE LEFT
-@OptIn(ExperimentalFoundationApi::class)
 fun PagerState.startOffsetForPage(page: Int): Float {
     return offsetForPage(page).coerceAtLeast(0f)
 }
 
 // OFFSET ONLY FROM THE RIGHT
-@OptIn(ExperimentalFoundationApi::class)
 fun PagerState.endOffsetForPage(page: Int): Float {
     return offsetForPage(page).coerceAtMost(0f)
 }
