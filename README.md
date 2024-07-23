@@ -24,7 +24,7 @@ This app uses the GROQ API for its AI chat feature. Follow these steps to set up
 
 - Go to the [**GROQ API Console**](https://console.groq.com/keys) and sign up for an account.
 - Obtain your API key from the console.
-- Open the local.properties file in the project root directory.
+- Open the data/utils/ApiConstants file in the project directory.
 - Add the following line to the file, replacing **YOUR_API_KEY** with your actual API key:
 
 
