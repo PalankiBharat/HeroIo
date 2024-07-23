@@ -10,9 +10,7 @@
 The Superhero KMP (Kotlin Multiplatform) app is a cross-platform application built using modern technologies and libraries. The app allows users to explore various superheroes, view detailed information, and chat with them using an AI-powered chat feature. The app boasts a cool retro look, enhancing the user experience.
 
 #Screenshots 
-![ChatScreen](https://github.com/user-attachments/assets/0e66ee59-0eef-4f0b-8ff2-9ccfba0466ee)
-![DetailsPage](https://github.com/user-attachments/assets/bbc48718-c3dd-40ae-b52a-badf24a267c8)
-![HomePage](https://github.com/user-attachments/assets/51f4cdc1-4fc5-43cb-8abc-3d2cb3971bf1)
+![Banner](https://github.com/PalankiBharat/HeroIo/blob/master/screenshots/Collage.png)
 
 ## Features
 
