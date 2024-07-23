@@ -45,7 +45,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgements
 
-- [Superhero API](https://superheroapi.com)
+- [Superhero API](https://akabab.github.io/superhero-api/api/)
 - [Jetpack Compose](https://developer.android.com/jetpack/compose)
 - [Ktor](https://ktor.io)
 - [Room](https://developer.android.com/training/data-storage/room)
