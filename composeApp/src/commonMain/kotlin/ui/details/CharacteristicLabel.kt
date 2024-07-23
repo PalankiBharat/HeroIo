@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.withTransform
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import heroio.composeapp.generated.resources.Res
 import heroio.composeapp.generated.resources.alignment_evil
@@ -49,7 +50,8 @@ fun CharacteristicLabel(
     modifier: Modifier = Modifier,
     value: String,
     image: Painter,
-    color: Color = themeColor
+    color: Color = themeColor,
+    width: Dp = 3.dp
 ) {
     Column(
         verticalArrangement = Arrangement.Center,
@@ -60,10 +62,10 @@ fun CharacteristicLabel(
             .fillMaxWidth(0.7f)
             .aspectRatio(1f)
             .drawBehind {
-                drawUpperHalfHexagon()
+                drawUpperHalfHexagon(width = width.toPx())
             }
             .drawBehind {
-                drawHexagon(color = color)
+                drawHexagon(color = color, width = width.toPx())
             }
         ) {
             Image(
@@ -85,7 +87,7 @@ fun CharacteristicLabel(
 
 }
 
-fun DrawScope.drawHexagon(color: Color) {
+fun DrawScope.drawHexagon(color: Color,width: Float = 3.dp.toPx()) {
     val path = Path()
     val centerX = size.width / 2
     val centerY = size.height / 2
@@ -110,13 +112,13 @@ fun DrawScope.drawHexagon(color: Color) {
         drawPath(
             path = path,
             color = color,
-            style = Stroke(width = 3.dp.toPx())
+            style = Stroke(width = width)
         )
     }
 
 }
 
-fun DrawScope.drawUpperHalfHexagon() {
+fun DrawScope.drawUpperHalfHexagon(width: Float = 3.dp.toPx()) {
     val path = Path()
     val centerX = size.width / 2
     val centerY = size.height / 2
@@ -148,7 +150,7 @@ fun DrawScope.drawUpperHalfHexagon() {
         drawPath(
             path = path,
             brush = Brush.horizontalGradient(colors = listOf(Color.Transparent, Color.Cyan)),
-            style = Stroke(width = 3.dp.toPx())
+            style = Stroke(width = width)
         )
     }
 }

@@ -6,6 +6,7 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
@@ -26,7 +28,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
-import androidx.compose.material.icons.filled.ChatBubbleOutline
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -68,6 +69,7 @@ import com.kmpalette.rememberDominantColorState
 import heroio.composeapp.generated.resources.Res
 import heroio.composeapp.generated.resources.health
 import heroio.composeapp.generated.resources.heart
+import heroio.composeapp.generated.resources.ic_chat
 import heroio.composeapp.generated.resources.muscle
 import heroio.composeapp.generated.resources.shield
 import heroio.composeapp.generated.resources.speed
@@ -119,8 +121,7 @@ fun DetailsScreen(
                     viewmodel.sendIntents(DetailsPageIntents.SetSelectedSuperhero(it.id))
                 }
                 SuperheroDetails(
-                    superhero = it,
-                    modifier = Modifier.fillMaxHeight()
+                    superhero = it, modifier = Modifier.fillMaxHeight()
                 )
             }
         }
@@ -140,17 +141,13 @@ fun SuperheroDetails(modifier: Modifier = Modifier, superhero: Superhero) {
         }
     }
     Column(
-        modifier = modifier.fillMaxSize()
-            .background(Color.Black)
+        modifier = modifier.fillMaxSize().background(Color.Black)
     ) {
         superhero.apply {
             Text(
-                "Hero Characteristics",
-                style = MaterialTheme.typography.bodyLarge.copy(
-                    color = Color.White,
-                    fontWeight = FontWeight.SemiBold
-                ),
-                modifier = Modifier.fillMaxWidth(0.9f).align(Alignment.CenterHorizontally)
+                "Hero Characteristics", style = MaterialTheme.typography.bodyLarge.copy(
+                    color = Color.White, fontWeight = FontWeight.SemiBold
+                ), modifier = Modifier.fillMaxWidth(0.9f).align(Alignment.CenterHorizontally)
             )
             CharacteristicRow(
                 modifier = Modifier.fillMaxWidth(0.9f).align(Alignment.CenterHorizontally)
@@ -170,14 +167,8 @@ fun SuperheroDetails(modifier: Modifier = Modifier, superhero: Superhero) {
 
             CharacterStatsColumn(
                 modifier = Modifier.fillMaxWidth(0.9f).align(Alignment.CenterHorizontally)
-                    .padding(top = 20.dp),
-                powerStats = powerStats ?: PowerStats(
-                    strength = 0,
-                    durability = 0,
-                    combat = 0,
-                    power = 0,
-                    speed = 0,
-                    intelligence = 0
+                    .padding(top = 20.dp), powerStats = powerStats ?: PowerStats(
+                    strength = 0, durability = 0, combat = 0, power = 0, speed = 0, intelligence = 0
                 )
             )
 
@@ -201,12 +192,14 @@ fun CharacteristicRow(
     ) {
         CharacteristicLabel(
             modifier = Modifier.weight(1f),
-            value = race, image = painterResource(getRaceImage(race)),
+            value = race,
+            image = painterResource(getRaceImage(race)),
             color = color
         )
         CharacteristicLabel(
             modifier = Modifier.weight(1f),
-            value = gender, image = painterResource(getGenderImage(gender)),
+            value = gender,
+            image = painterResource(getGenderImage(gender)),
             color = color
         )
         CharacteristicLabel(
@@ -234,15 +227,15 @@ fun CharacterStatsColumn(modifier: Modifier = Modifier, powerStats: PowerStats) 
         ) {
             StatsBar(
                 modifier = Modifier.weight(1f),
-                progress = powerStats.combat.toSafePercentage(),
                 color = yellow,
+                progress = powerStats.combat.toSafePercentage(),
                 image = Res.drawable.swords
             )
             StatsBar(
                 modifier = Modifier.weight(1f),
                 //took as health
-                progress = powerStats.strength.toSafePercentage(),
                 color = green,
+                progress = powerStats.strength.toSafePercentage(),
                 image = Res.drawable.health
             )
         }
@@ -253,14 +246,14 @@ fun CharacterStatsColumn(modifier: Modifier = Modifier, powerStats: PowerStats) 
         ) {
             StatsBar(
                 modifier = Modifier.weight(1f),
-                progress = powerStats.speed.toSafePercentage(),
                 color = purple,
+                progress = powerStats.speed.toSafePercentage(),
                 image = Res.drawable.speed
             )
             StatsBar(
                 modifier = Modifier.weight(1f),
-                progress = powerStats.intelligence.toSafePercentage(),
                 color = blue,
+                progress = powerStats.intelligence.toSafePercentage(),
                 image = Res.drawable.shield
             )
         }
@@ -271,14 +264,14 @@ fun CharacterStatsColumn(modifier: Modifier = Modifier, powerStats: PowerStats) 
         ) {
             StatsBar(
                 modifier = Modifier.weight(1f),
-                progress = powerStats.combat.toSafePercentage(),
                 color = orange,
+                progress = powerStats.combat.toSafePercentage(),
                 image = Res.drawable.muscle
             )
             StatsBar(
                 modifier = Modifier.weight(1f),
-                progress = powerStats.durability.toSafePercentage(),
                 color = red,
+                progress = powerStats.durability.toSafePercentage(),
                 image = Res.drawable.heart
             )
         }
@@ -304,23 +297,19 @@ fun SharedTransitionScope.DetailsPager(
         superheroList.count()
     })
     var offsetY by remember { mutableStateOf(0f) }
-    LaunchedEffect(key1 = pagerState.currentPage)
-    {
+    LaunchedEffect(key1 = pagerState.currentPage) {
         onHeroChange(superheroList.getOrElse(pagerState.currentPage) {
             selectedSuperhero
-        }
-        )
+        })
     }
 
     Box(modifier = modifier) {
         HorizontalPager(
             state = pagerState,
             modifier = Modifier.pointerInput(Unit) {
-                detectTapGestures(
-                    onPress = { offset ->
-                        offsetY = offset.y
-                    }
-                )
+                detectTapGestures(onPress = { offset ->
+                    offsetY = offset.y
+                })
             },
             key = {
                 superheroList[it].id
@@ -329,76 +318,68 @@ fun SharedTransitionScope.DetailsPager(
             val image = superheroList[page].imagesEntity?.largeImage
             Box {
                 image?.let {
-                    AsyncImage(
-                        model = image,
+                    AsyncImage(model = image,
                         contentDescription = image,
                         contentScale = ContentScale.Crop,
-                        modifier = Modifier.Companion
-                            .sharedElement(
-                                sharedTransitionScope.rememberSharedContentState(key = "HeroImage-${superheroList[page].id}"),
-                                animatedVisibilityScope = animatedContentScope
+                        modifier = Modifier.Companion.sharedElement(
+                            sharedTransitionScope.rememberSharedContentState(key = "HeroImage-${superheroList[page].id}"),
+                            animatedVisibilityScope = animatedContentScope
+                        ).drawWithContent {
+                            drawContent()
+                            drawRect(
+                                brush = Brush.verticalGradient(
+                                    colors = listOf(Color.Transparent, Color.Black),
+                                ), size = size
                             )
-                            .drawWithContent {
-                                drawContent()
-                                drawRect(
-                                    brush = Brush.verticalGradient(
-                                        colors = listOf(Color.Transparent, Color.Black),
+                            drawRect(
+                                brush = Brush.verticalGradient(
+                                    colors = listOf(
+                                        Color.Black, Color.Transparent, Color.Transparent
                                     ),
-                                    size = size
+                                ), size = size
+                            )
+                        }.fillMaxSize().graphicsLayer {
+                            val pageOffset = pagerState.offsetForPage(page)
+                            translationX = size.width * pageOffset
+
+                            val endOffset = pagerState.endOffsetForPage(page)
+                            shape = CirclePath(
+                                progress = 1f - endOffset.absoluteValue, origin = Offset(
+                                    size.width,
+                                    offsetY,
                                 )
-                                drawRect(
-                                    brush = Brush.verticalGradient(
-                                        colors = listOf(
-                                            Color.Black,
-                                            Color.Transparent,
-                                            Color.Transparent
-                                        ),
-                                    ),
-                                    size = size
-                                )
-                            }
-                            .fillMaxSize()
-                            .graphicsLayer {
-                                val pageOffset = pagerState.offsetForPage(page)
-                                translationX = size.width * pageOffset
+                            )
+                            clip = true
 
-                                val endOffset = pagerState.endOffsetForPage(page)
-                                shape = CirclePath(
-                                    progress = 1f - endOffset.absoluteValue,
-                                    origin = Offset(
-                                        size.width,
-                                        offsetY,
-                                    )
-                                )
-                                clip = true
+                            val absoluteOffset = pagerState.offsetForPage(page).absoluteValue
+                            val scale = 1f + (absoluteOffset.absoluteValue * .4f)
 
-                                val absoluteOffset = pagerState.offsetForPage(page).absoluteValue
-                                val scale = 1f + (absoluteOffset.absoluteValue * .4f)
+                            scaleX = scale
+                            scaleY = scale
 
-                                scaleX = scale
-                                scaleY = scale
-
-                                val startOffset = pagerState.startOffsetForPage(page)
-                                alpha = (2f - startOffset) / 2f
-                            }
-                    )
+                            val startOffset = pagerState.startOffsetForPage(page)
+                            alpha = (2f - startOffset) / 2f
+                        })
                 }
             }
         }
 
         ScramblingText(
-            modifier = Modifier.Companion
-                .sharedElement(
-                    sharedTransitionScope.rememberSharedContentState(key = "Text-${selectedSuperhero.name}"),
-                    animatedVisibilityScope = animatedContentScope
-                ).align(Alignment.BottomStart).padding(20.dp).padding(bottom = 10.dp),
+            modifier = Modifier.Companion.sharedElement(
+                sharedTransitionScope.rememberSharedContentState(key = "Text-${selectedSuperhero.name}"),
+                animatedVisibilityScope = animatedContentScope
+            ).align(Alignment.BottomStart).padding(20.dp).padding(bottom = 10.dp),
             data = listOf(
                 selectedSuperhero.name,
                 selectedSuperhero.fullName ?: "",
             )
         )
 
-        Row(modifier = modifier.fillMaxWidth(0.5f).statusBarsPadding().padding(top = 10.dp)) {
+        Row(
+            modifier = Modifier.fillMaxWidth(0.9f).statusBarsPadding().padding(top = 10.dp).align(
+                Alignment.TopCenter
+            ), verticalAlignment = Alignment.CenterVertically
+        ) {
             IconButton(
                 onClick = {
                     navController.popBackStack()
@@ -411,21 +392,18 @@ fun SharedTransitionScope.DetailsPager(
                 )
             }
             Spacer(Modifier.weight(1f))
-            IconButton(onClick = {
-                navController.navigate(
-                    AppNavigation.Chat(
-                        id = selectedSuperhero.id,
-                        name = selectedSuperhero.name,
-                        img = selectedSuperhero.imagesEntity?.midImage ?: ""
+            CharacteristicLabel(
+                modifier = Modifier.size(56.dp).clickable {
+                    navController.navigate(
+                        AppNavigation.Chat(
+                            id = selectedSuperhero.id,
+                            name = selectedSuperhero.name,
+                            img = selectedSuperhero.imagesEntity?.midImage ?: ""
+                        )
                     )
-                )
-            }) {
-                Icon(
-                    imageVector = Icons.Filled.ChatBubbleOutline,
-                    contentDescription = "",
-                    tint = Color.White
-                )
-            }
+                }, image = painterResource(Res.drawable.ic_chat), value = "",
+                width = 1.dp
+            )
         }
 
     }

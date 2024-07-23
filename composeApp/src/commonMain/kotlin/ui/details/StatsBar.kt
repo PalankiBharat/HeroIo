@@ -1,5 +1,7 @@
 package ui.details
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -11,6 +13,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
@@ -26,11 +30,22 @@ import org.jetbrains.compose.resources.painterResource
 fun StatsBar(
     modifier: Modifier = Modifier,
     color: Color,
-    backgroundColor: Color = Color.Black.copy(alpha = 0.7f),
     progress: Float,
     cornerRadius: Dp = 10.dp,
     image: DrawableResource
 ) {
+    // Create an Animatable instance for the progress value
+    val animatedProgress = remember { Animatable(0f) }
+
+    // Launch a coroutine to animate the progress
+    LaunchedEffect(progress) {
+            animatedProgress.animateTo(
+                targetValue = progress,
+                animationSpec = tween(durationMillis = 1600)
+            )
+    }
+
+
     Row(
         modifier = modifier.padding(horizontal = 6.dp, vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -52,7 +67,7 @@ fun StatsBar(
         ) {
             Canvas(
                 modifier = Modifier
-                    .fillMaxWidth(progress)
+                    .fillMaxWidth(animatedProgress.value)
                     .height(20.dp)
                     .padding(6.dp)
             ) {
@@ -68,17 +83,6 @@ fun StatsBar(
                     ),
                     cornerRadius = CornerRadius(cornerRadius.toPx(), cornerRadius.toPx())
                 )
-                /*val brush = Brush.horizontalGradient(
-                    colors = listOf(
-                        backgroundColor,
-                        color,
-                    )
-                )
-                drawCircle(
-                    brush = brush,
-                    center = Offset(x = size.width - size.height / 2, y = size.height / 2),
-                    radius = size.height / 1.2f
-                )*/
             }
         }
     }
