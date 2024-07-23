@@ -32,13 +32,13 @@ This app uses the GROQ API for its AI chat feature. Follow these steps to set up
 
 ## Technologies Used
 
-- **Kotlin Multiplatform**
-- **Jetpack Compose**
-- **Ktor**
-- **Room**
-- **Android ViewModel**
-- **Multi-modular Architecture**
-- **Compose Navigation**
+- 🌐 **[Kotlin Multiplatform](https://kotlinlang.org/docs/multiplatform.html)**
+- 🖼️ **[Jetpack Compose](https://developer.android.com/jetpack/compose)**
+- 🌍 **[Ktor](https://ktor.io/)**
+- 🗄️ **[Room](https://developer.android.com/training/data-storage/room)**
+- 📊 **[Android ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)**
+- 🏗️ **[Multi-modular Architecture](https://developer.android.com/studio/build/multi-module)**
+- 🧭 **[Compose Navigation](https://developer.android.com/jetpack/compose/navigation)**
 
 ## Screenshots 
 ![Banner](https://github.com/PalankiBharat/HeroIo/blob/master/screenshots/Collage.png)
