@@ -39,6 +39,10 @@ This app uses the GROQ API for its AI chat feature. Follow these steps to set up
 ## Screenshots 
 ![Banner](https://github.com/PalankiBharat/HeroIo/blob/master/screenshots/Collage.png)
 
+## Video 
+![Banner](https://github.com/PalankiBharat/HeroIo/blob/master/screenshots/Check%20about%20your%20favrite%20Hero.mp4)
+
+
 ## License
 ```
 Copyright 2024 P N Bharat Kumar
