@@ -42,7 +42,7 @@ This app uses the GROQ API for its AI chat feature. Follow these steps to set up
 ## Video 
 <div align="center">
 </br>
-<img src="https://github.com/PalankiBharat/HeroIo/blob/master/screenshots/Check%20about%20your%20favrite%20Hero.gif" width="500" height="900" />
+<img src="https://github.com/PalankiBharat/HeroIo/blob/master/screenshots/Check%20about%20your%20favrite%20Hero.gif" width="450" height="800" />
 </div>
 
 
